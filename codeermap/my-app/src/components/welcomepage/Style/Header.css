@@ -1,0 +1,76 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Zorg ervoor dat alles verticaal gecentreerd is */
+  background-color: #fff;
+  padding: 20px 0px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  flex-wrap: wrap; /* Zorg ervoor dat het zich aanpast aan kleinere schermen */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.company-name {
+  font-size: 21px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Standaard zoekbalk stijl */
+.search-bar {
+  padding: 5px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding-left: 20px;
+  font-size: 16px;
+}
+
+/* Zoekcontainer stijl */
+.search-container {
+  padding-left: 10px;
+}
+
+/* Focus stijl voor zoekbalk */
+.search-bar:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+
+/* Stijlen voor de knoppen */
+.nav button {
+  margin-left: 10px;
+  padding: 10px;
+  background-color: #1D3F75;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.nav button:hover {
+  background-color: #1a73e8;
+}
+
+/* Verberg de zoekbalk op kleinere schermen */
+@media (max-width: 768px) {
+  .search-container {
+    display: none; /* Verberg de zoekcontainer op kleinere schermen */
+  };
+}

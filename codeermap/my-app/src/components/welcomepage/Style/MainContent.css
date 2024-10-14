@@ -1,0 +1,41 @@
+body {
+  background-color: #fff; /* Light gray */
+  box-sizing: border-box;
+}
+
+main {
+  text-align: center;
+  margin-top: 50px;
+}
+  
+main .buttons {
+  margin-top: 20px;
+}
+
+main button.register, main button.login {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #1D3F75;
+  color: #fff;
+}
+
+main button.register:hover, main button.login:hover {
+  color: #fff;
+  background-color: #1a73e8;
+}
+
+main p{
+  padding-left: 20%;
+  padding-right: 20%;
+  font-size: 150%;
+}
+
+main h1{
+  font-size: 350%;
+}
+
+main h2{
+  font-size: 200%;
+}
