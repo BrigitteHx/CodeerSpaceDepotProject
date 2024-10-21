@@ -5,14 +5,15 @@ import "./Style/RegisterForm.css"; // Import your styles
 
 const RegisterForm = () => {
   const navigate = useNavigate(); // Initialize useNavigate
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
     phoneNumber: "",
     location: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   const [isSubmitted, setIsSubmitted] = useState(false); // State to track successful registration
   const [loading, setLoading] = useState(false); // For showing a loading indicator
@@ -37,6 +38,27 @@ const RegisterForm = () => {
       return; // Exit the function
     }
 
+    // Validate that the password is at least 8 characters long
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      setLoading(false); // Stop loading
+      return; // Exit the function
+    }
+
+    // Validate that phoneNumber contains only numbers
+    const phoneNumberPattern = /^\d+$/;
+    if (!phoneNumberPattern.test(formData.phoneNumber)) {
+      setError("Phone number must contain only numbers");
+      setLoading(false); // Stop loading
+      return; // Exit the function
+    }
+
+    // Validate that the password is at least 8 characters long
+    if (formData.phoneNumber.length < 5) {
+      setError("Phone number must be at least 5 numbers long");
+      setLoading(false); // Stop loading
+      return; // Exit the function
+    }
     try {
       // Send the actual form data to the API
       await axios.post('http://localhost:5000/api/register', {
@@ -59,8 +81,9 @@ const RegisterForm = () => {
 
   // Handle cancel button click (navigates back to welcome page)
   const handleCancel = () => {
-    navigate('/'); // Redirect to welcome page (or another page)
+    navigate('/');
   };
+
   // If form is submitted successfully, show confirmation message
   if (isSubmitted) {
     return (
@@ -147,14 +170,13 @@ const RegisterForm = () => {
               <a href="/">Privacy Policy</a>.
             </label>
           </div>
-          <button type="submit" className="register-submit-button" disabled={loading}>
-            {loading ? "Registering..." : "Sign up"}
-          </button>
           
-          {/* Add the cancel button here */}
-          <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
-
-          {/* Display error message if there's one */}
+          <div className="register-button-container">
+            <button type="submit" className="register-submit-button" disabled={loading}>
+              {loading ? "Registering..." : "Sign up"}
+            </button>
+            <button type="button" className="register-cancel-button" onClick={handleCancel}>Cancel</button>
+          </div>
           {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}
         </form>
         <p className="register-login-prompt">

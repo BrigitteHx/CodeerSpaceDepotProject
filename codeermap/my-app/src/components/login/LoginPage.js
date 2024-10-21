@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // To handle navigation after login
-import ErrorAlert from "./ErrorAlert"; 
+import { useNavigate } from "react-router-dom";
+import ErrorAlert from "./ErrorAlert";
+import SuccessAlert from "./SuccessAlert";
 import LoginButtons from "./LoginButtons";
 import "./Style/LoginPage.css";
 
@@ -52,7 +53,7 @@ const LoginForm = () => {
       }
 
       setLoginAttempts(0); // Reset failed attempts
-      showAlert('Login Successful', 'Redirecting to your dashboard...');
+      showAlert('Login Successful', 'Redirecting to your dashboard...', 'success'); // Toon succesmelding met groene alert
 
       setTimeout(() => {
         navigate('/dashboard'); // Redirect to the dashboard after successful login
@@ -92,12 +93,13 @@ const LoginForm = () => {
     }
   };
 
-  // Function to show alerts
-  const showAlert = (title, message) => {
+  // Functie om meldingen te tonen
+  const showAlert = (title, message, type = 'error') => {
     const newAlert = {
       id: Date.now(),
       title,
       message,
+      type, // Voeg het type alert toe (error of success)
       fading: false,
     };
     setAlerts(prev => [...prev, newAlert]);
@@ -168,14 +170,25 @@ const LoginForm = () => {
 
           <div className="alert-container">
             {alerts.map((alert) => (
-              <ErrorAlert
-                key={alert.id}
-                id={alert.id}
-                title={alert.title}
-                message={alert.message}
-                onClose={removeAlert}
-                className=""
-              />
+              alert.type === 'success' ? (
+                <SuccessAlert
+                  key={alert.id}
+                  id={alert.id}
+                  title={alert.title}
+                  message={alert.message}
+                  onClose={removeAlert}
+                  className=""
+                />
+              ) : (
+                <ErrorAlert
+                  key={alert.id}
+                  id={alert.id}
+                  title={alert.title}
+                  message={alert.message}
+                  onClose={removeAlert}
+                  className=""
+                />
+              )
             ))}
           </div>
 
