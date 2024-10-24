@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Style/MainContent.css';
+import './style/MainContent.css';
 import RedirectButtons from './RedirectButtons';
 
 const MainContent = () => {

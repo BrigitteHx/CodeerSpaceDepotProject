@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import ErrorAlert from "./ErrorAlert";
 import SuccessAlert from "./SuccessAlert";
 import LoginButtons from "./LoginButtons";
-import "./Style/LoginPage.css";
+import useRecaptchaV3 from "../captcha/Captcha"; 
+import { useAuth } from "../AuthContext"; // Import useAuth from AuthContext
+import "./style/LoginPage.css";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -16,8 +18,13 @@ const LoginForm = () => {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [blockTime, setBlockTime] = useState(null);
   const [isBlocked, setIsBlocked] = useState(false);
-  const [loading, setLoading] = useState(false); // Added loading state
-  const navigate = useNavigate(); // To redirect users after a successful login.
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const { login } = useAuth(); // Get login function from AuthContext
+
+  // Initialize reCAPTCHA
+  const executeRecaptcha = useRecaptchaV3('6Lc_A2EqAAAAANr-GXLMhgjBdRYWKpZ1y-YwF7Mk', 'login');
 
   const handleChange = (e) => {
     setFormData({
@@ -33,52 +40,55 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the user is blocked
     if (isBlocked) {
-      const remainingTime = Math.ceil((blockTime - Date.now()) / 1000 / 60); // in minutes
+      const remainingTime = Math.ceil((blockTime - Date.now()) / 1000 / 60); 
       showAlert('Account Blocked', `Your account is temporarily blocked due to too many failed login attempts. Try again in ${remainingTime} minutes.`);
       return;
     }
 
     try {
-      setLoading(true); // Show loading state
-      const response = await axios.post('http://localhost:5000/api/login', formData); // Send login data to the API
+      setLoading(true);
+
+      // Get reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha('login');
+
+      // Combine form data and reCAPTCHA token
+      const data = {
+        ...formData,
+        token: recaptchaToken,
+      };
+
+      const response = await axios.post('http://localhost:5000/api/login', data); // Use login function from AuthContext to set the login state and store the token
       const { token } = response.data;
 
-      // Save the token in localStorage or sessionStorage
-      if (rememberMe) {
-        localStorage.setItem('authToken', token);
-      } else {
-        sessionStorage.setItem('authToken', token);
-      }
+      // Use login function from AuthContext to set the login state and store the token
+      await login(token); 
 
-      setLoginAttempts(0); // Reset failed attempts
-      showAlert('Login Successful', 'Redirecting to your dashboard...', 'success'); // Toon succesmelding met groene alert
+      setLoginAttempts(0);
+      showAlert('Login Successful', 'Redirecting...', 'success'); // Show success alert
 
       setTimeout(() => {
-        navigate('/dashboard'); // Redirect to the dashboard after successful login
-      }, 1000); // Short delay to show feedback
+        navigate('/home'); // Redirect to the dashboard after successful login
+      }, 1000);
 
     } catch (error) {
       handleError(error);
     } finally {
-      setLoading(false); // Stop loading state
+      setLoading(false); 
     }
   };
 
   const handleCancel = () => {
-    navigate('/'); // Redirect to welcome page (or another page)
+    navigate('/'); // Redirect to the welcome page
   };
-  
-  // Error handling function
+
   const handleError = (error) => {
     if (error.response) {
       if (error.response.status === 401) {
         setLoginAttempts(prev => prev + 1);
-        
-        // Block the account after 5 failed attempts
+
         if (loginAttempts + 1 >= 5) {
-          setBlockTime(Date.now() + 15 * 60 * 1000); // Block for 15 minutes
+          setBlockTime(Date.now() + 15 * 60 * 1000); 
           setIsBlocked(true);
           showAlert('Blocked', 'Too many failed attempts. Please try again in 15 minutes.');
         } else {
@@ -93,13 +103,12 @@ const LoginForm = () => {
     }
   };
 
-  // Functie om meldingen te tonen
   const showAlert = (title, message, type = 'error') => {
     const newAlert = {
       id: Date.now(),
       title,
       message,
-      type, // Voeg het type alert toe (error of success)
+      type, // Include alert type (error or success)
       fading: false,
     };
     setAlerts(prev => [...prev, newAlert]);
@@ -113,8 +122,8 @@ const LoginForm = () => {
     if (isBlocked && blockTime) {
       const timer = setInterval(() => {
         if (Date.now() >= blockTime) {
-          setIsBlocked(false); // Unblock the user after the timeout
-          setLoginAttempts(0); // Reset attempts
+          setIsBlocked(false); 
+          setLoginAttempts(0); 
           clearInterval(timer);
         }
       }, 1000);
@@ -163,8 +172,7 @@ const LoginForm = () => {
           </div>
           
           <div className="button">
-          <LoginButtons onClick={handleSubmit} />
-            {/* Add the cancel button here */}
+            <LoginButtons onClick={handleSubmit} />
             <button type="button" className="cancel-button" onClick={handleCancel}>Back to welcome page</button>
           </div>
 
@@ -192,7 +200,6 @@ const LoginForm = () => {
             ))}
           </div>
 
-          {/* Display a subtle loading indicator while redirecting */}
           {loading && <p>Logging in...</p>}
         </form>
 

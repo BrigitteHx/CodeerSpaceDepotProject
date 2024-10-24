@@ -1,5 +1,5 @@
 import React from 'react';
-import './Style/SuccessAlert.css';
+import './style/SuccesAlert.css';
 
 const SuccessAlert = ({ id, title, message, onClose, className }) => {
   return (

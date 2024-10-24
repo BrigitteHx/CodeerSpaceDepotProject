@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios"; // Ensure axios is imported
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import "./Style/RegisterForm.css"; // Import your styles
+import axios from "axios"; 
+import { useNavigate } from "react-router-dom"; 
+import useRecaptchaV3 from "../captcha/Captcha"; 
+import { getFunctions, httpsCallable } from 'firebase/functions'; 
+import "./style/RegisterForm.css"; 
 
 const RegisterForm = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
   const initialFormData = {
     name: "",
     email: "",
@@ -13,11 +15,15 @@ const RegisterForm = () => {
     phoneNumber: "",
     location: "",
   };
+
   const [formData, setFormData] = useState(initialFormData);
 
-  const [isSubmitted, setIsSubmitted] = useState(false); // State to track successful registration
-  const [loading, setLoading] = useState(false); // For showing a loading indicator
-  const [error, setError] = useState(null); // State for error messages
+  const [isSubmitted, setIsSubmitted] = useState(false); 
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(null); 
+
+  // Initialize reCAPTCHA
+  const executeRecaptcha = useRecaptchaV3('6Lc_A2EqAAAAANr-GXLMhgjBdRYWKpZ1y-YwF7Mk', 'register');
 
   const handleChange = (e) => {
     setFormData({
@@ -26,12 +32,38 @@ const RegisterForm = () => {
     });
   };
 
+  // Functie om wachtwoordsterkte te valideren
+  const validatePasswordStrength = (password) => {
+    const minLength = 8; // Minimale lengte van het wachtwoord
+
+    // Regex voor meer beveiliging (minimaal 8 tekens, 1 hoofdletter, 1 cijfer en 1 speciaal teken)
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    if (password.length < minLength) {
+      return `Password must be at least ${minLength} characters long.`;
+    }
+
+    if (!strongPasswordRegex.test(password)) {
+      return 'Password must contain at least 1 uppercase letter, 1 number, and 1 special character.';
+    }
+
+    return ''; // Als het wachtwoord geldig is, geef een lege string terug
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading state
-    setError(null); // Reset error message
+    setLoading(true); 
+    setError(null); 
 
-    // Validate that the passwords match
+    // Valideer wachtwoordsterkte
+    const passwordError = validatePasswordStrength(formData.password);
+    if (passwordError) {
+      setError(passwordError);
+      setLoading(false); // Stop loading
+      return; // Exit the function
+    }
+
+    // Valideer dat de wachtwoorden overeenkomen
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       setLoading(false); // Stop loading
@@ -70,27 +102,25 @@ const RegisterForm = () => {
       });
 
       alert('User registered successfully');
-      setIsSubmitted(true); // Mark form as successfully submitted
+      setIsSubmitted(true); 
     } catch (error) {
       console.log("Error registering:", error);
-      setError("Error registering user. Please try again."); // Set error message for user feedback
+      setError("Error registering user. Please try again.");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); 
     }
   };
 
-  // Handle cancel button click (navigates back to welcome page)
   const handleCancel = () => {
-    navigate('/');
+    setFormData(initialFormData);
   };
 
-  // If form is submitted successfully, show confirmation message
   if (isSubmitted) {
     return (
       <div className="confirmation-container">
         <h1>Registration Successful!</h1>
         <p>Welcome, {formData.name}! Your account has been successfully created.</p>
-        <p>You can now <a href="/login">log in</a> to access your dashboard and start managing your energy consumption.</p>
+        <p>You can now <strong> <a href="/login">log in</a> </strong> to access your dashboard and start managing your energy consumption.</p>
         <p>Thank you for joining us!</p>
       </div>
     );
@@ -172,9 +202,9 @@ const RegisterForm = () => {
           </div>
           
           <div className="register-button-container">
-            <button type="submit" className="register-submit-button" disabled={loading}>
-              {loading ? "Registering..." : "Sign up"}
-            </button>
+          <button type="submit" className="register-submit-button" disabled={loading}>
+            {loading ? "Registering..." : "Sign up"}
+          </button>
             <button type="button" className="register-cancel-button" onClick={handleCancel}>Cancel</button>
           </div>
           {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}
@@ -190,7 +220,7 @@ const RegisterForm = () => {
         <div className="register-social-login">
           <button className="register-social-button facebook">f</button>
           <button className="register-social-button google">G</button>
-          <button className="register-social-button apple"></button>
+          <button className="register-social-button apple">ï£¿</button>
         </div>
       </div>
     </div>

@@ -50,6 +50,7 @@
 }
 
 .register-submit-button {
+  flex: 1;
   padding: 12px;
   background-color: #1b3b73;
   color: white;
@@ -57,9 +58,8 @@
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
-
 .register-submit-button:hover {
   background-color: #142a50;
 }
@@ -141,7 +141,12 @@
     display: inline-block; 
     margin: 0 10px; 
 }
-
+.register-button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 10px;
+}
 
 .register-or-divider::before {
     margin-right: 10px;
@@ -155,24 +160,25 @@
     color: #777;
     font-size: 14px;
 }
-
-.cancel-button {
+.register-cancel-button {
+  flex: 1;
+  padding: 12px;
   background-color: #f8f9fa;
   color: #007bff;
   border: 1px solid #007bff;
-  border-radius: 4px;
-  padding: 10px 15px;
+  border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  margin-top: 10px;
 }
-.cancel-button:hover {
+
+.register-cancel-button:hover {
   background-color: #007bff;
   color: #ffffff;
   border: 1px solid #007bff;
 }
-.cancel-button:focus {
+
+.register-cancel-button:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
