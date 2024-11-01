@@ -270,6 +270,39 @@ app.post('/api/reset-password', (req, res) => {
     });
 });
 
+// Nieuwe contact route
+app.post('/api/contact', (req, res) => {
+    const { name, email, phone, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ message: 'Vul alle verplichte velden in.' });
+    }
+
+    // Nodemailer configuratie
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail', // Of een andere SMTP-server
+        auth: {
+            user: 'contactpaginatest@gmail.com',
+            pass: 'Wachtwoord123!'
+        }
+    });
+
+    const mailOptions = {
+        from: email,
+        to: 'contactpaginatest@gmail.com', // Het adres waar je berichten wilt ontvangen
+        subject: `Nieuw contactverzoek van ${name}`,
+        text: `Naam: ${name}\nEmail: ${email}\nTelefoonnummer: ${phone}\n\nBericht:\n${message}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Er is een fout opgetreden:', error);
+            return res.status(500).json({ message: 'Er is een fout opgetreden bij het verzenden van de e-mail.' });
+        }
+        res.status(200).json({ message: 'Bericht succesvol verzonden!' });
+    });
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
