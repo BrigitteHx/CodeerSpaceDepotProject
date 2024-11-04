@@ -4,9 +4,22 @@ import './style/InfoForm.css';
 const InformationPage = () => {
     return (
         <div className="information-container">
-            <div className="section introduction">
-                <h1>Home Battery Simulator: Manage Your Energy, Save Costs</h1>
-                <p>Welcome to the Home Battery Simulator information page! This application is designed to help homeowners with solar panels understand and maximize the benefits of using a home battery to manage their energy storage and reduce energy costs.</p>
+            <div className="intro-section">
+                <div className="section">
+                    <h1>Home Battery Simulator: Manage Your Energy, Save Costs</h1>
+                    <p>
+                        The Home Battery Simulator allows you to explore the benefits of using a home battery to manage your energy
+                        consumption and reduce costs. By simulating energy usage and storage, this tool provides insights into
+                        potential savings and optimal energy usage.
+                    </p>
+                </div>
+                <div className="faq-prompt">
+                    <h2>Do you have any questions about using it?</h2>
+                    <p>
+                        Your question may be among the frequently asked questions!<br />
+                        If not, please contact us here: <a href="/contact" className="contact-link">contact page</a>.
+                    </p>
+                </div>
             </div>
 
             <div className="section features">
