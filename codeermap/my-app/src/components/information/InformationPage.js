@@ -1,5 +1,5 @@
 import React from 'react';
-import './style/InformationPage.css';
+import './style/InfoForm.css';
 
 const InformationPage = () => {
     return (

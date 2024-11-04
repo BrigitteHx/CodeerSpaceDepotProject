@@ -1,0 +1,95 @@
+/* Container styling for the entire information page */
+.information-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 0 auto;
+    width: 80%;
+}
+
+/* Styling for each section box */
+.section {
+    width: 100%;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px; /* Reduced spacing between sections */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling for sections with a dark blue background */
+.section h1, .section h2 {
+    background-color: #1b3b73; /* Dark blue background */
+    color: white; /* White text for titles */
+    padding: 10px 15px; /* Padding inside title boxes */
+    margin: -20px -20px 15px -20px; /* Adjust margins to fill section width */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Align text to the left within each section */
+.section p, .section ul, .section h3 {
+    text-align: left;
+}
+
+/* Paragraph and list styling within each section */
+.section p {
+    line-height: 1.4; /* Reduced line spacing for compact look */
+    margin-bottom: 10px; /* Consistent, small spacing between paragraphs */
+}
+
+.section ul {
+    list-style-type: disc;
+    padding-left: 20px; /* Padding for list items */
+    margin: 0;
+}
+
+.section ul li {
+    margin-bottom: 8px;
+}
+
+/* FAQ item styling for questions and answers */
+.faq-item h3 {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.faq-item p {
+    margin-bottom: 15px;
+}
+
+/* Link styling in the contact section */
+.contact-support a {
+    color: #1b3b73;
+    text-decoration: none;
+}
+
+.contact-support a:hover {
+    text-decoration: underline;
+}
+
+/* Box styling for paragraphs */
+.section p, .section ul {
+    background-color: #ffffff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Responsive styling for mobile */
+@media screen and (max-width: 768px) {
+    .information-container {
+        width: 90%;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    .section h1, .section h2 {
+        font-size: 1.6em;
+    }
+}

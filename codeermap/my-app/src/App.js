@@ -11,6 +11,7 @@ import Homepage from './components/homepage/homepage';
 import PrivateRoute from './components/PrivateRoute'; // Import the PrivateRoute component
 import { AuthProvider } from './components/AuthContext'; // Import AuthProvider
 import ContactPage from './components/contact/ContactPage'; // Importeer ContactPage component
+import InformationPage from './components/information/InformationPage';
 import './App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/password_reset" element={<PasswordReset />} />
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/information" element={<InformationPage />} />
             
             {/* Protect the /home route */}
             <Route 
