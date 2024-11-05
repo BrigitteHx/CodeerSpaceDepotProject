@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './style/ContactForm.css'; 
+import './style/ContactForm.css';
 import axios from 'axios';
 
 const ContactPage = () => {
@@ -9,8 +9,8 @@ const ContactPage = () => {
         phone: '',
         message: ''
     });
-
     const [status, setStatus] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -19,15 +19,30 @@ const ContactPage = () => {
         });
     };
 
+    const validateEmailFormat = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
+        // Email format validation
+        if (!validateEmailFormat(formData.email)) {
+            setStatus("Invalid email format. Please enter a valid email.");
+            setLoading(false);
+            return;
+        }
+
         try {
-            await axios.post('/api/contact', formData);
-            setStatus('Bericht succesvol verzonden!');
-            // Reset form after successful submission if needed
+            await axios.post('http://localhost:5000/api/contact', formData);
+            setStatus("Your message has been sent successfully!");
             setFormData({ name: '', email: '', phone: '', message: '' });
         } catch (error) {
-            setStatus('Er is een fout opgetreden. Probeer het later opnieuw.');
+            setStatus("An error occurred. Please try again later.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -40,7 +55,7 @@ const ContactPage = () => {
                 </p>
             </div>
             <div className="contact-right-panel">
-                <h1>Contactformulier</h1>
+                <h1>Contact Form</h1>
                 <form onSubmit={handleSubmit} className="contact-form">
                     <input
                         type="text"
@@ -72,7 +87,9 @@ const ContactPage = () => {
                         onChange={handleChange}
                         required
                     />
-                    <button type="submit" className="contact-submit-button">Send</button>
+                    <button type="submit" className="contact-submit-button" disabled={loading}>
+                        {loading ? "Sending..." : "Send"}
+                    </button>
                     {status && <p className="status-message">{status}</p>}
                 </form>
             </div>
