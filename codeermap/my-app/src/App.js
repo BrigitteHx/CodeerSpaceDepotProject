@@ -12,6 +12,11 @@ import PrivateRoute from './components/PrivateRoute'; // Import the PrivateRoute
 import { AuthProvider } from './components/AuthContext'; // Import AuthProvider
 import ContactPage from './components/contact/ContactPage'; // Importeer ContactPage component
 import InformationPage from './components/information/InformationPage';
+import UserAccountPage from './components/user_account/UserAccountPage';
+import FaqPage from './components/faq/FaqPage';
+import SettingsPage from './components/settings/SettingsPage';
+import BatteryDashboard from './components/dashboard/BatteryDashboard';
+import SolarPanelDashboard from './components/dashboard/SolarPanelDashboard';
 import './App.css';
 
 function App() {
@@ -39,6 +44,11 @@ function App() {
               } 
             />
             <Route path="/password-reset" element={<PasswordReset />} />
+            <Route path="/user-account" element={<UserAccountPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/dashboard-battery" element={<BatteryDashboard />} />
+            <Route path="/dashboard-solarpanel" element={<SolarPanelDashboard />} />
           </Routes>
           <Footer />
         </div>
