@@ -88,7 +88,17 @@ ul li {
 }
 
 .bm-overlay {
-  display: none !important; /* Schakel de overlay uit zodat deze de rest van de pagina niet blokkeert */
+  display: none !important; /* Schakel de overlay volledig uit */
+}
+
+.bm-burger-button {
+  z-index: 1; /* Verlaag z-index zodat deze andere elementen niet blokkeert */
+}
+
+.bm-burger-button {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
 }
 
 .bm-item-list {
