@@ -1,4 +1,3 @@
-// Header.js
 import React, { useState } from 'react';
 import './style/Header.css';
 import logo from './images/logo.png';
@@ -49,7 +48,7 @@ const Header = () => {
           </div>
 
           {/* Menu with close button */}
-          <Menu right isOpen={isMenuOpen} onStateChange={({ isOpen }) => setIsMenuOpen(isOpen)}>
+          <Menu right isOpen={isMenuOpen} disableOverlayClick>
             <button className="menu-close" onClick={toggleMenu}>&times;</button>
             <Link to="/information" className="menu-item" onClick={toggleMenu}>Information</Link>
             <Link to="/faq" className="menu-item" onClick={toggleMenu}>FAQ</Link>
