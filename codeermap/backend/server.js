@@ -284,7 +284,7 @@ app.post('/api/contact', (req, res) => {
         service: 'Gmail',
         auth: {
             user: 'contactpaginatest@gmail.com',
-            pass: 'whli rmte afix cjmr' // Replace with env var in production
+            pass: 'mhkm nhvz pmit lyud' 
         }
     });
 

@@ -27,24 +27,34 @@ const ContactPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-
+    
         // Email format validation
         if (!validateEmailFormat(formData.email)) {
             setStatus("Invalid email format. Please enter a valid email.");
             setLoading(false);
             return;
         }
-
+    
         try {
             await axios.post('http://localhost:5000/api/contact', formData);
             setStatus("Your message has been sent successfully!");
             setFormData({ name: '', email: '', phone: '', message: '' });
         } catch (error) {
-            setStatus("An error occurred. Please try again later.");
+            // Specifieke foutmeldingen op basis van het type fout
+            if (error.response) {
+                // Server heeft gereageerd met een statuscode buiten het 2xx bereik
+                setStatus("Server error: Please try again later.");
+            } else if (error.request) {
+                // De aanvraag werd verzonden, maar er is geen antwoord ontvangen
+                setStatus("Network error: Please check your connection and try again.");
+            } else {
+                // Er is iets anders misgegaan bij het opzetten van de aanvraag
+                setStatus("An error occurred. Please try again.");
+            }
         } finally {
             setLoading(false);
         }
-    };
+    };    
 
     return (
         <div className="contact-container">
