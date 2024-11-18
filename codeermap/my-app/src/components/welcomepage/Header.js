@@ -1,64 +1,44 @@
-import React, { useState } from 'react';
-import './style/Header.css';
+import React from 'react';
 import logo from './images/logo.png';
 import profile from './images/profile.png';
 import { useAuth } from '../AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
-import { slide as Menu } from 'react-burger-menu';
+import DropdownMenu from './DropdownMenu'; // Nieuwe component
+import './style/Header.css';
 
 const Header = () => {
-  const { loggedIn, userData, logout, error } = useAuth();
-  const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const { loggedIn, userData, error } = useAuth();
 
   return (
-    <div className="navbar">
-      <a href="/">
-        <img className="logo" src={logo} alt="logo" />
+    <div className='navbar'>
+      <a href='/'>
+        <img className='logo' src={logo} alt='logo'></img>
       </a>
-      <div className="headerMenu">
-        <div className="rightMenu">
-          <ul>
-            <li>About Us</li>
-            <li>Customer Service</li>
-            <li>How it works?</li>
-          </ul>
-          {loggedIn && (
+      
+      <div className='headerMenu'>
+        <div className='rightMenu'>
+          {loggedIn ? (
             <>
-              <img src={profile} alt="profile" className="profile" />
+              <ul>
+                <a href='/home'><li>Home</li></a>
+                <a href='/solar-panel-dashboard'><li>Solar Panels Dashboard</li></a>
+                <a href='/battery-dashboard'><li>Battery Dashboard</li></a>
+                <a href='/simulation'><li>Simulation</li></a>
+              </ul>
+              <img src={profile} alt='profile' className='profile'></img>
               <span>{userData?.name}</span>
+              <DropdownMenu />
+            </>
+          ) : (
+            <>
+              <ul>
+                <li>About Us</li>
+                <li>Customer Service</li>
+                <li>How it works?</li>
+              </ul>
             </>
           )}
+
           {error && <div className="error">{error}</div>}
-
-          {/* Menu icon with conditional class */}
-          <div className={`menu-icon ${isMenuOpen ? 'menu-open' : ''}`} onClick={toggleMenu}>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-
-          {/* Menu with close button */}
-          <Menu right isOpen={isMenuOpen} disableOverlayClick>
-            <button className="menu-close" onClick={toggleMenu}>&times;</button>
-            <Link to="/information" className="menu-item" onClick={toggleMenu}>Information</Link>
-            <Link to="/faq" className="menu-item" onClick={toggleMenu}>FAQ</Link>
-            <Link to="/contact" className="menu-item" onClick={toggleMenu}>Contact</Link>
-            <Link to="/user-account" className="menu-item" onClick={toggleMenu}>User Account</Link>
-            <Link to="/settings" className="menu-item" onClick={toggleMenu}>Settings</Link>
-            <Link to="/dashboard-solarpanel" className="menu-item" onClick={toggleMenu}>Dashboard Solar Panel</Link>
-            <Link to="/dashboard-battery" className="menu-item" onClick={toggleMenu}>Dashboard Battery</Link>
-            <button className="menu-item logout-button" onClick={handleLogout}>Logout</button>
-          </Menu>
         </div>
       </div>
     </div>
