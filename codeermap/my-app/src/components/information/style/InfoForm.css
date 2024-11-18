@@ -3,183 +3,111 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 40px;
     margin: 0 auto;
-    width: 80%;
+    max-width: 1200px;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Styling for each section box */
-.section {
+.information-section {
     width: 100%;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 15px; /* Reduced spacing between sections */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-/* Title styling for sections with a dark blue background */
-.section h1, .section h2 {
-    background-color: #1b3b73; /* Dark blue background */
-    color: white; /* White text for titles */
-    padding: 10px 15px; /* Padding inside title boxes */
-    margin: -20px -20px 15px -20px; /* Adjust margins to fill section width */
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+/* Hover effect for sections */
+.information-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* Align text to the left within each section */
-.section p, .section ul, .section h3 {
-    text-align: left;
+/* Title styling for sections */
+.information-section-title {
+    color: #333;
+    font-size: 2.2em;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* Paragraph and list styling within each section */
-.section p {
-    line-height: 1.4; /* Reduced line spacing for compact look */
-    margin-bottom: 10px; /* Consistent, small spacing between paragraphs */
-}
-
-.section ul {
-    list-style-type: disc;
-    padding-left: 20px; /* Padding for list items */
-    margin: 0;
-}
-
-.section ul li {
-    margin-bottom: 8px;
-}
-
-/* FAQ item styling for questions and answers */
-.faq-item h3 {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.faq-item p {
+/* Paragraph and list styling */
+.information-section-description,
+.information-faq-answer {
+    color: #666;
+    line-height: 1.6;
     margin-bottom: 15px;
 }
 
-/* Link styling in the contact section */
-.contact-support a {
-    color: #1b3b73;
-    text-decoration: none;
+/* For lists in sections */
+.information-feature-list,
+.information-security-list,
+.information-accessibility-list,
+.information-contact-list,
+.information-faq-prompt,
+.information-update-log-list {
+    padding-left: 20px;
 }
 
-.contact-support a:hover {
-    text-decoration: underline;
-}
-
-/* Box styling for paragraphs */
-.section p, .section ul {
-    background-color: #ffffff;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+/* Styling for list items */
+.information-feature-item,
+.information-security-item,
+.information-accessibility-item,
+.information-faq-prompt,
+.information-contact-item,
+.information-update-log-item {
     margin-bottom: 10px;
 }
 
-/* Responsive styling for mobile */
+/* FAQ prompt at the bottom */
+/* Styling voor de FAQ prompt */
+.information-faq-prompt {
+    width: 100%; /* Zorg ervoor dat de breedte gelijk is */
+    max-width: 1200px; /* Consistente maximale breedte */
+    background-color: #1b3b73; /* Behouden achtergrondkleur */
+    color: white; /* Behouden tekstkleur */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Zelfde box-shadow als de secties */
+    transition: all 0.3s ease; /* Zelfde overgangseffecten */
+    margin: 0 auto 20px auto; /* Consistente marges */
+}
+
+/* Hover effect voor de FAQ-prompt */
+.information-faq-prompt:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* FAQ titel en beschrijving */
+.information-faq-title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.information-faq-description {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+/* Media Queries voor mobiel */
 @media screen and (max-width: 768px) {
-    .information-container {
-        width: 90%;
+    .information-faq-prompt {
+        padding: 20px;
+        margin-top: 20px;
     }
 
-    .section {
-        padding: 15px;
+    .information-faq-title {
+        font-size: 1.8em;
     }
 
-    .section h1, .section h2 {
-        font-size: 1.6em;
-    }
-}
-
-/* Container styling for the entire information page */
-.information-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    margin: 0 auto;
-    width: 80%;
-}
-
-/* Intro section styling (half-width layout) */
-.intro-section {
-    display: flex;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.intro-section .section {
-    width: 50%;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
-}
-
-.intro-section .faq-prompt {
-    width: 45%;
-    background-color: #1b3b73; /* Dark blue background for the FAQ prompt box */
-    color: white;
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.intro-section .faq-prompt h2 {
-    margin: 0 0 10px;
-    font-size: 1.5em;
-}
-
-.intro-section .faq-prompt p {
-    margin: 0;
-    font-size: 1em;
-}
-
-/* Link styling for contact page link */
-.contact-link {
-    color: #ffdd57; /* Light yellow for contrast */
-    text-decoration: underline;
-}
-
-.contact-link:hover {
-    color: #ffd700; /* Slightly darker yellow on hover */
-    text-decoration: none;
-}
-
-/* General section styling */
-.section {
-    width: 100%;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive styling for mobile */
-@media screen and (max-width: 768px) {
-    .information-container {
-        width: 90%;
-    }
-
-    .intro-section {
-        flex-direction: column;
-    }
-
-    .intro-section .section,
-    .intro-section .faq-prompt {
-        width: 100%;
-        margin: 0 0 10px;
+    .information-faq-description {
+        font-size: 1em;
     }
 }
