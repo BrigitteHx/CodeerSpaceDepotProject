@@ -1,0 +1,21 @@
+.sellButton {
+    background-color: #d9534f;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .sellButton:hover {
+    background-color: #c9302c;
+  }
+  
+  .MuiTypography-h6 {
+    color: #343a40;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  

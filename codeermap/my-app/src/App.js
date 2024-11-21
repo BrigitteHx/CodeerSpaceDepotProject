@@ -15,8 +15,7 @@ import InformationPage from './components/information/InformationPage';
 import UserAccountPage from './components/user_account/UserAccountPage';
 import FaqPage from './components/faq/FaqPage';
 import SettingsPage from './components/settings/SettingsPage';
-import BatteryDashboard from './components/dashboard/BatteryDashboard';
-import SolarPanelDashboard from './components/dashboard/SolarPanelDashboard';
+import BatteryDashboard from './components/battery_dashboard/batteryDashboard';
 import './App.css';
 
 function App() {
@@ -47,8 +46,7 @@ function App() {
             <Route path="/user-account" element={<UserAccountPage />} />
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/dashboard-battery" element={<BatteryDashboard />} />
-            <Route path="/dashboard-solarpanel" element={<SolarPanelDashboard />} />
+            <Route path="/battery-dashboard" element={<BatteryDashboard />} />
           </Routes>
           <Footer />
         </div>

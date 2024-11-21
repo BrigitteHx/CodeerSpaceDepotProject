@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoutes');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const secretKey = process.env.JWT_SECRET || '77b22a07938ccbb0565abc929d9ee5726affa3c4b197ea58ed28374d8f42161cadf47f74a95a10099d9c9d72541fbea1f579ba123b68cb9021edf8046ce030c6'; // Use environment variable for the secret key
@@ -269,6 +270,50 @@ app.post('/api/reset-password', (req, res) => {
     });
 });
 
+
+// Middleware for authentication (example)
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+  
+    const token = authHeader.split(' ')[1];
+    // Add your token verification logic here
+    if (!token) return res.status(403).json({ message: 'Forbidden' });
+  
+    // If verified
+    next();
+};
+
+// Endpoint to add a battery
+app.post('/api/addBattery', verifyToken, (req, res) => {
+    console.log('Request body:', req.body);
+    const { name, capacity, installationDate } = req.body;
+
+    // Validate required fields
+    if (!name || !capacity || !installationDate) {
+        console.error('Missing required fields');
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const userId = req.userId;  // Now using the userId from the JWT token
+    console.log('User ID:', userId);
+
+    if (!userId) {
+        console.error('Missing user ID');
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const sql = 'INSERT INTO Battery (name, capacity, installation_date, user_id) VALUES (?, ?, ?, ?)';
+    db.query(sql, [name, capacity, installationDate, userId], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        console.log('Battery added:', result);
+        res.status(201).json({ message: 'Battery added successfully' });
+    });
+});
+
 // Contact form route
 app.post('/api/contact', (req, res) => {
     const { name, email, phone, message } = req.body;
@@ -330,6 +375,38 @@ app.post('/api/contact', (req, res) => {
     });
 });
 
+app.get('/api/readBatteries',verifyToken, (req, res) => {
+    const userId = req.userId; // Ensure that the userId is available in the session or JWT token
+  
+    if (!userId) {
+      console.error('Missing user ID');
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  
+    // Correct SQL query with parameter binding
+    const sql = 'SELECT * FROM battery WHERE user_id = ?';
+    
+    // Assuming you have a MySQL connection `db` to run the query
+    db.query(sql, [userId], (err, results) => {
+      if (err) {
+        console.error('Error fetching batteries:', err);
+        return res.status(500).json({ error: 'Failed to fetch batteries' });
+      }
+      res.json(results); // Send the batteries data as response
+    });
+  });
+// Endpoint to handle user action
+app.post('/api/user-action', authenticateToken, (req, res) => {
+    const { userId } = req.body;
+
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    console.log(`Received user ID: ${userId}`);
+    // Perform the desired action, e.g., save to database
+    res.status(200).json({ message: 'User ID received successfully', userId });
+});
 
 // Start the server
 app.listen(PORT, () => {
