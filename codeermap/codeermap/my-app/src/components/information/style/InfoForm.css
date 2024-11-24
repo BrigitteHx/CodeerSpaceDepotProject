@@ -1,0 +1,113 @@
+/* Container styling for the entire information page */
+.information-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    margin: 0 auto;
+    max-width: 1200px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Styling for each section box */
+.information-section {
+    width: 100%;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for sections */
+.information-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Title styling for sections */
+.information-section-title {
+    color: #333;
+    font-size: 2.2em;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Paragraph and list styling */
+.information-section-description,
+.information-faq-answer {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* For lists in sections */
+.information-feature-list,
+.information-security-list,
+.information-accessibility-list,
+.information-contact-list,
+.information-faq-prompt,
+.information-update-log-list {
+    padding-left: 20px;
+}
+
+/* Styling for list items */
+.information-feature-item,
+.information-security-item,
+.information-accessibility-item,
+.information-faq-prompt,
+.information-contact-item,
+.information-update-log-item {
+    margin-bottom: 10px;
+}
+
+/* FAQ prompt at the bottom */
+/* Styling voor de FAQ prompt */
+.information-faq-prompt {
+    width: 100%; /* Zorg ervoor dat de breedte gelijk is */
+    max-width: 1200px; /* Consistente maximale breedte */
+    background-color: #1b3b73; /* Behouden achtergrondkleur */
+    color: white; /* Behouden tekstkleur */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Zelfde box-shadow als de secties */
+    transition: all 0.3s ease; /* Zelfde overgangseffecten */
+    margin: 0 auto 20px auto; /* Consistente marges */
+}
+
+/* Hover effect voor de FAQ-prompt */
+.information-faq-prompt:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* FAQ titel en beschrijving */
+.information-faq-title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.information-faq-description {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+/* Media Queries voor mobiel */
+@media screen and (max-width: 768px) {
+    .information-faq-prompt {
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .information-faq-title {
+        font-size: 1.8em;
+    }
+
+    .information-faq-description {
+        font-size: 1em;
+    }
+}

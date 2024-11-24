@@ -1,0 +1,85 @@
+/* Styling voor de contact pagina container */
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    margin: 0 auto;
+    width: 80%;
+}
+
+/* Linker paneel met achtergrondkleur */
+.contact-left-panel {
+    background-color: #1b3b73;
+    color: white;
+    width: 40%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Rechter paneel voor het contactformulier */
+.contact-right-panel {
+    width: 50%;
+    padding: 40px;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Formulier styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+}
+
+/* Input styling */
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Verstuur knop styling */
+.contact-submit-button {
+    padding: 12px;
+    background-color: #1b3b73;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Volledige breedte */
+}
+
+.contact-submit-button:hover {
+    background-color: #142a50;
+}
+
+/* Statusbericht styling */
+.status-message {
+    margin-top: 10px;
+    color: green; /* Kleur voor succes */
+}
+
+/* Responsiviteit voor mobiel */
+@media screen and (max-width: 768px) {
+    .contact-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px; 
+    }
+
+    .contact-left-panel,
+    .contact-right-panel {
+        width: 100%; 
+        padding: 20px; 
+        margin-bottom: 20px;
+    }
+}

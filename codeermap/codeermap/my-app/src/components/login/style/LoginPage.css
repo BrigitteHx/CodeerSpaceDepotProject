@@ -1,0 +1,199 @@
+/* LoginPage.css */
+body {
+  background-color: #fff; /* Wit achtergrond */
+  box-sizing: border-box;
+}
+
+.login-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  margin: 0 auto;
+  width: 80%;
+}
+
+.login-right-panel {
+  background-color: #1b3b73; /* Donkerblauwe achtergrond */
+  color: white;
+  width: 40%; /* Breedte van het rechter paneel */
+  padding: 40px; /* Padding binnen het paneel */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-right-panel-title {
+  font-size: 28px; /* Titelgrootte */
+  margin-bottom: 20px; /* Ruimte onder de titel */
+}
+
+.login-right-panel-description {
+  font-size: 16px; /* Grootte van de beschrijving */
+  margin-bottom: 15px; /* Ruimte onder de beschrijving */
+}
+
+.login-left-panel {
+  width: 50%; /* Breedte van het linker paneel */
+  padding: 40px; /* Padding binnen het paneel */
+  background-color: #f8f9fa; /* Lichtgrijze achtergrond */
+  align-items: center; /* Centreren van elementen */
+  display: flex;
+  flex-direction: column; /* Verticale stapeling van elementen */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+}
+
+.login-input {
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-container .login {
+  padding: 12px;
+  background-color: #1b3b73;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  width: 100%;
+  
+}
+
+.login-container .login:hover { 
+  background-color: #142a50;
+}
+
+.login-checkbox-container {
+  display: flex; /* Flexbox voor checkbox en label */
+  align-items: center; /* Centreren van elementen */
+  margin-bottom: 20px; /* Ruimte onder de checkbox */
+  justify-content: space-between; /* Ruimte tussen checkbox en label */
+}
+
+.login-checkbox {
+  margin-right: 10px; /* Ruimte rechts van checkbox */
+}
+
+.login-terms-links a {
+  color: #1b3b73; /* Kleur van de termen links */
+  text-decoration: none; /* Geen onderstreping */
+}
+
+.login-login-prompt {
+  margin-bottom: 20px; /* Ruimte onder de login prompt */
+}
+
+.login-login-prompt a {
+  color: #1b3b73; /* Kleur van de login prompt link */
+  text-decoration: none; /* Geen onderstreping */
+}
+
+.login-social-login {
+  display: flex; /* Flexbox voor sociale knoppen */
+  justify-content: space-around; /* Ruimte tussen sociale knoppen */
+  width: 100%; /* Breedte van sociale login sectie */
+}
+
+.login-social-button {
+  width: 40px; /* Breedte van sociale knoppen */
+  height: 40px; /* Hoogte van sociale knoppen */
+  border-radius: 50%; /* Ronde knoppen */
+  display: flex; /* Flexbox voor de sociale knoppen */
+  align-items: center; /* Centreren van iconen */
+  justify-content: center; /* Centreren van iconen */
+  font-size: 20px; /* Grootte van de iconen */
+  cursor: pointer; /* Cursor verandert naar pointer */
+  border: 1px solid #ccc; /* Grijze rand */
+}
+
+.login-social-button.facebook {
+  background-color: #4267b2;
+  color: white;
+}
+
+.login-social-button.google {
+  background-color: #db4437;
+  color: white;
+}
+
+.login-social-button.apple {
+  background-color: black;
+  color: white;
+}
+
+.login-or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.login-or-divider::before,
+.login-or-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ccc;
+  display: inline-block;
+  margin: 0 10px; 
+}
+
+.login-or-divider::before {
+  margin-right: 10px;
+}
+
+.login-or-divider::after {
+  margin-left: 10px; 
+}
+
+.login-or-divider span {
+  color: #777; 
+  font-size: 14px; 
+}
+.cancel-button {
+  background-color: #f8f9fa;
+  width: 100%;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 10px;
+}
+
+.cancel-button:hover {
+  background-color: #007bff;
+  color: #ffffff;
+  border: 1px solid #007bff;
+}
+
+.cancel-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+/* Responsive styling */
+@media screen and (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; 
+  }
+
+  .login-left-panel,
+  .login-right-panel {
+    width: 100%; 
+    padding: 20px; 
+    margin-bottom: 20px;
+  }
+}
