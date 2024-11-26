@@ -52,24 +52,6 @@ function FAQPage() {
         return matchesSearch && matchesTag;
     });
 
-    const handleGeneralCommentSubmit = () => {
-        if (newComment.trim() !== "") {
-            setGeneralComments([...generalComments, newComment]);
-            setNewComment("");
-        }
-    };
-
-    // Handle Contact Us form submission
-    const handleContactSubmit = (e) => {
-        e.preventDefault();
-        // In a real app, here you would send the form data to your backend or email service
-        console.log("Contact Form Submitted", { contactName, contactEmail, contactMessage });
-        // Clear the contact form after submission
-        setContactName("");
-        setContactEmail("");
-        setContactMessage("");
-    };
-
     return (
         <div className="faq-page">
             <h1 className="faq-title">Frequently Asked Questions</h1>
@@ -100,20 +82,27 @@ function FAQPage() {
             </div>
 
             <div className="faq-list">
-                {filteredQuestions.map(({ id, question, answer }) => (
-                    <div key={id} className="faq-item">
-                        <div className="faq-question" onClick={() => toggleAnswer(id)}>
-                            <span>{question}</span>
-                            <span className="faq-icon">{activeId === id ? "−" : "+"}</span>
-                        </div>
-                        {activeId === id && (
-                            <div className="faq-answer">
-                                {answer}
+                {filteredQuestions.length > 0 ? (
+                    filteredQuestions.map(({ id, question, answer }) => (
+                        <div key={id} className="faq-item">
+                            <div className="faq-question" onClick={() => toggleAnswer(id)}>
+                                <span>{question}</span>
+                                <span className="faq-icon">{activeId === id ? "−" : "+"}</span>
                             </div>
-                        )}
+                            {activeId === id && (
+                                <div className="faq-answer">
+                                    {answer}
+                                </div>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <div className="no-results">
+                        <p>No results found for your search. Please try a different term or browse by topic.</p>
                     </div>
-                ))}
+                )}
             </div>
+
 
             {/* Contact Us Section */}
             <div className="contact-us-section">

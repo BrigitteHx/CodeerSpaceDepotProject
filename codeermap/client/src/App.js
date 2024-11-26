@@ -16,7 +16,7 @@ import AboutUsPage from './components/aboutus/AboutUs';
 import FAQPage from './components/faq/FAQPage';
 import FeedbackForm from './components/feedback/FeedbackForm';
 import FloatingChatButton from './components/faq/FloatingChatButton';
-
+import UserAccountPage from './components/useraccount/UserAccount';
 import { PrivateRoute, PublicRoute } from './components/routes/PrivateRoute';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import Swal from 'sweetalert2';
@@ -78,7 +78,7 @@ function App() {
             <Route path="/aboutus" element={< AboutUsPage/>} />
             <Route path="/faq" element={< FAQPage/>} />
             <Route path="/feedback" element={<FeedbackForm />} />
-
+            <Route path="/user-account" element={< UserAccountPage/>} />
             
             
             <Route path="/login" element={
