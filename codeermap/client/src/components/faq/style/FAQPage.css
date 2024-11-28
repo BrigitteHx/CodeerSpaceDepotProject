@@ -15,7 +15,7 @@
 /* Action Buttons Grid */
 .action-buttons {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on larger screens */
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -43,23 +43,75 @@
     color: #666;
 }
 
+/* --------------------------------------- */
+
+/* Search Bar */
 .search-bar {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    position: relative;
 }
 
-.search-bar input,
+.search-input-container {
+    flex-grow: 1;
+    width: 50%;
+}
 .search-bar select {
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    width: 20%;
 }
 
-.search-bar select {
-    height: 43px;
+.search-input-container .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #999;
 }
 
+.search-input-container input {
+    padding: 12px 12px 12px 40px; /* Add space for the icon */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 94%;
+    font-size: 1rem;
+}
+
+
+/* Suggestions Bar */
+/* Suggestions Bar */
+.suggestions-bar {
+    position: absolute;
+    left: 0;
+    right: 0; /* Make it span the width of the search bar */
+    top: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    margin-top: 5px;
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    text-align: left;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Faq Section */
 .faq-list {
     display: flex;
     flex-direction: column;
@@ -124,40 +176,74 @@ button {
 }
 
 .contact-us-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 .contact-us-section p {
-    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.information-contact-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-.contact-input,
-.contact-textarea {
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+.information-contact-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
 
-.contact-textarea {
-    height: 150px;
-    resize: none;
-}
 
-/* Responsive Design for Small Screens */
-@media (max-width: 600px) {
+/* Responsive Design for iPad (768px to 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
     .action-buttons {
-        grid-template-columns: 1fr; /* 1 column on small screens */
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on iPads */
     }
 
     .action-button {
         padding: 15px;
+        font-size: 1rem; /* Slightly larger font for readability */
+    }
+
+    .search-bar input,
+    .search-bar select {
+        width: 90%;
+    }
+
+    .search-bar select {
+        height: 43px;
+        width: 30%;
+    }
+}
+
+/* Responsive Design for Smaller Screens (600px and below) */
+@media (max-width: 768px) {
+    .action-buttons {
+        grid-template-columns: 1fr; /* 1 column on very small screens */
+    }
+
+    .action-button {
+        padding: 12px;
         font-size: 0.9rem;
     }
+
+    
+    .search-bar input,
+    .search-bar select {
+        width: 80%;
+    }
+
+    .search-bar select {
+        height: 43px;
+        width: 30%;
+    }
+
 }
