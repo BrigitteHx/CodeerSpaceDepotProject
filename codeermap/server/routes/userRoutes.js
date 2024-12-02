@@ -9,8 +9,8 @@ router.get('/user-info', verifyToken, (req, res) => {
   // Access the database connection from req.db
   const db = req.db;
 
-  // Query your MySQL database to get user data by userId
-  db.query('SELECT id, name, email, phoneNumber, location FROM users WHERE id = ?', [userId], (err, results) => {
+  // Query your MySQL database to get user data by userId, including bio, gender, and dob
+  db.query('SELECT id, name, email, phoneNumber, location, bio, gender, dob, profilePicture, notifications FROM users WHERE id = ?', [userId], (err, results) => {
     if (err) {
       return res.status(500).send('Error querying the database.');
     }

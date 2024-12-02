@@ -1,0 +1,169 @@
+.dashboard-page {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 900px; /* Consistent max width */
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+  min-height: 100vh;
+}
+
+/* Box for header */
+.dashboard-page-box-1 {
+background-color: #fff;
+padding: 20px;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+border-radius: 8px;
+}
+
+.dashboard-page-container{
+    max-width: 95%;
+    margin: 20px auto;
+    padding: 30px; /* Reduced padding */
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+}
+
+/* Styling for the Time Period Dropdown */
+.dashboard-page-container .time-period-selector select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.dashboard-page-container .time-period-selector select:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.dashboard-page-container .time-period-selector select:hover {
+  border-color: #0056b3;
+  background-color: #f0f8ff;
+}
+
+/* Enhancing the Label Style */
+.dashboard-page-container .time-period-selector label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 10px;
+  color: #333;
+}
+  
+  .dashboard-page-box-1 h1 {
+    font-size: 30px;
+  }
+  
+  .dashboard-page-box-1 p {
+    font-size: 16px;
+  }
+  
+  /* Styling for Chart Title */
+.dashboard-page-container .chart-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+/* Flexbox for horizontal chart alignment */
+.dashboard-page-container .charts-container {
+margin-top: 20px;
+}
+
+/* Chart Titles */
+.dashboard-chart-box  h4 {
+font-size: 18px;
+margin-bottom: 10px;
+text-align: center;
+}
+
+/* Set a fixed height for charts to prevent oversized rendering */
+.dashboard-chart-box canvas {
+max-height: 400px;
+width: 100% !important;
+height: 400px !important;
+}
+
+.export-options {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Adds space between buttons */
+}
+
+.export-options button {
+  padding: 10px;
+  margin: 10px;
+  background-color: #F89820;
+  color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.export-options button:hover {
+  background-color: #e38512; /* Button hover effect */
+  color: white; /* Text color change on hover */
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+.chart-container {
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard-chart-box canvas {
+    max-height: 300px;
+    height: 300px !important;
+}
+
+.header h1 {
+    font-size: 28px;
+}
+
+.header p {
+    font-size: 16px;
+}
+.export-options button {
+  padding: 10px 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+}
+
+@media (max-width: 576px) {
+.header h1 {
+    font-size: 24px;
+}
+.header p {
+    font-size: 14px;
+}
+
+.dashboard-chart-box h4 {
+    font-size: 15px;
+}
+
+.dashboard-page-container .time-period-selector select {
+  font-size: 13px;
+}
+.dashboard-page-container .time-period-selector label {
+  font-size: 13px;
+}
+
+}

@@ -1,0 +1,129 @@
+/* Sidebar Container */
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: #1D3F75; /* Lucrasoft-blauw */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  z-index: 100;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+  width: 70px;
+  transition: width 0.3s ease;
+}
+
+.sidebar.collapsed .text {
+  display: none;
+}
+
+.sidebar.collapsed .icon {
+  margin-right: 0;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.profile-section img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.profile-section .name {
+  color: #ecf0f1;
+  font-size: 20px;
+  font-weight: bold;
+  display: none;
+}
+
+.sidebar:not(.collapsed) .profile-section .name {
+  display: block; /* Show name when sidebar is expanded */
+}
+
+/* Navigation List */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar li {
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #ecf0f1; /* Light text color */
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #F89820; /* Lucrasoft-oranje on hover */
+  color: white;
+}
+
+.sidebar a .icon {
+  font-size: 25px;
+  margin-right: 15px;
+}
+
+.sidebar .toggle-btn {
+  margin: 10px auto;
+  cursor: pointer;
+  font-size: 24px;
+  color: #ecf0f1;
+}
+
+.sidebar .toggle-btn:hover {
+  color: #F89820; /* Change to Lucrasoft-oranje on hover */
+}
+
+/* Logout Section */
+.logout-section {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.logout-link {
+  text-decoration: none;
+  font-weight: bold;
+  color: #ecf0f1; /* Light text color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-section a.active,
+.logout-section a:hover {
+  background-color: #e74c3c; /* Red for hover effect */
+}
+
+.logout-link .icon {
+  margin-right: 10px;
+  font-size: 20px;
+}

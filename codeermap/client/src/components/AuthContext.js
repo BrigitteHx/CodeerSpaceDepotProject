@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = () => {
     return localStorage.getItem('authToken') || sessionStorage.getItem('authToken') ? true : false;
   };
-
+  
   // Function to fetch user data
   const fetchUserData = async () => {
     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, userData, error, login, logout }}>
+    <AuthContext.Provider value={{ loggedIn, userData, error, setUserData, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

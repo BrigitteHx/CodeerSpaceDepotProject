@@ -8,6 +8,8 @@ require('dotenv').config();
 const userRoutes = require('./routes/userRoutes');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const multer = require('multer');
+const path = require('path');
 
 
 const app = express();
@@ -18,6 +20,7 @@ const secretKey = process.env.JWT_SECRET || '77b22a07938ccbb0565abc929d9ee5726af
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database configuration
 const db = mysql.createConnection({
@@ -202,7 +205,7 @@ app.post('/api/password-reset', rateLimiter, (req, res) => {
                     text: `Hello ${user.name},\n\n` + 
                           `You are receiving this email because we received a request to reset the password for your account.\n\n` +
                           `To reset your password, please click on the following link or paste it into your browser:\n\n` +
-                          `http://localhost:3000/reset/${token}\n\n` +
+                          `http://localhost:5000/reset/${token}\n\n` +
                           `This link will expire in one hour. If you did not request this, please ignore this email and your password will remain unchanged.\n\n` +
                           `Best regards,\n` +
                           `The Solar Panel Simulation Team\n` +
@@ -211,7 +214,7 @@ app.post('/api/password-reset', rateLimiter, (req, res) => {
                            <p>Hello ${user.name},</p>
                            <p>You are receiving this email because we received a request to reset the password for your account.</p>
                            <p>To reset your password, please click on the following link or paste it into your browser:</p>
-                           <p><a href="http://localhost:3000/reset/${token}">Reset Password</a></p>
+                           <p><a href="http://localhost:5000/reset/${token}">Reset Password</a></p>
                            <p>This link will expire in one hour. If you did not request this, please ignore this email and your password will remain unchanged.</p>
                            <p>Best regards,<br/>The Solar Panel Simulation Team</p>
                            <p>For questions or support, please contact us at <a href="mailto:solarpanelsimulation@gmail.com">solarpanelsimulation@gmail.com</a></p>`,
@@ -406,6 +409,344 @@ app.post('/api/user-action', authenticateToken, (req, res) => {
     console.log(`Received user ID: ${userId}`);
     // Perform the desired action, e.g., save to database
     res.status(200).json({ message: 'User ID received successfully', userId });
+});
+
+// Get user profile data
+app.get('/api/user-profile', verifyToken, (req, res) => {
+    const userId = req.userId;
+
+    // Query to get user details
+    db.query('SELECT id, name, email, phoneNumber, location, bio, gender, dob, notifications FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(404).send('User not found');
+        }
+
+        const user = results[0];
+        res.status(200).json({
+            user: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+              location: user.location,
+              bio: user.bio,
+              gender: user.gender,
+              dob: user.dob || '',
+              notifications: user.notifications || []
+            }
+        });
+      });
+});
+
+
+// Update user profile
+app.put('/update-profile', verifyToken, (req, res) => {
+    const userId = req.userId; // Assumed you get the userId from token verification middleware
+    const { name, email, phoneNumber, location, bio, gender, dob, notifications } = req.body;
+
+    // Update user profile in the database (including email)
+    db.query(
+        'UPDATE users SET name = ?, email = ?, phoneNumber = ?, location = ?, bio = ?, gender = ?, dob = ? WHERE id = ?',
+        [name, email, phoneNumber, location, bio, gender, dob, userId],
+        (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Failed to update profile' });
+            }
+
+            // Fetch the updated user details including the updated email and notification preferences
+            db.query(
+                'SELECT email, name, notifications FROM users WHERE id = ?',
+                [userId],
+                (err, results) => {
+                    if (err || results.length === 0) {
+                        return res.status(404).send('User not found');
+                    }
+
+                    const user = results[0];
+
+                    // Check notification preference
+                    if (!user.notifications) {
+                        // If notifications are disabled, skip email and return success
+                        return res.status(200).json({ message: 'Profile updated successfully, no notification sent' });
+                    }
+
+                    // Set up email transporter
+                    const transporter = nodemailer.createTransport({
+                        service: 'Gmail',
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS,
+                        },
+                    });
+
+                    const mailOptions = {
+                        to: user.email, // Send to the updated email address
+                        from: 'noreply@yourdomain.com',
+                        subject: 'Profile Updated',
+                        text: `Hello ${user.name},\n\nYour account profile has been successfully updated.\n\nIf you did not make this change, please contact our support team immediately.\n\nBest regards,\nThe Team`,
+                        html: `<h2>Profile Updated</h2>
+                               <p>Hello ${user.name},</p>
+                               <p>Your account profile has been successfully updated.</p>
+                               <p>If you did not make this change, please contact our support team immediately.</p>
+                               <p>Best regards,<br/>The Team</p>`,
+                    };
+
+                    // Send confirmation email
+                    transporter.sendMail(mailOptions, (err) => {
+                        if (err) {
+                            console.error('Error sending update email:', err);
+                            return res.status(500).json({ error: 'Error sending email notification' });
+                        }
+
+                        // Return success response
+                        res.status(200).json({ message: 'Profile updated and notification sent' });
+                    });
+                }
+            );
+        }
+    );
+});
+
+
+// Endpoint to check if email exists
+app.post('/check-email', verifyToken, (req, res) => {
+    const { email } = req.body;
+    const userId = req.userId; // Assuming the user ID is retrieved from the token
+  
+    // Query to check if the email already exists in the database
+    db.query(
+      'SELECT id FROM users WHERE email = ? AND id != ?',
+      [email, userId],
+      (err, results) => {
+        if (err) {
+          console.error('Database error:', err);
+          return res.status(500).json({ error: 'Failed to check email' });
+        }
+  
+        // If email already exists for a different user
+        if (results.length > 0) {
+          return res.status(400).json({ exists: true });
+        }
+  
+        // If email is unique, proceed
+        return res.status(200).json({ exists: false });
+      }
+    );
+  });
+
+  
+// Upload profile picture
+// Set storage engine for multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname));
+    }
+  });
+
+  const upload = multer({ storage });
+  // Ensure the directory exists
+  const fs = require('fs');
+  if (!fs.existsSync('./uploads')) {
+    fs.mkdirSync('./uploads');
+  }
+  
+  app.put('/upload-profile-picture', verifyToken, upload.single('profilePicture'), (req, res) => {
+    const userId = req.userId;
+    const filePath = `/uploads/${req.file.filename}`; // Store the file path
+
+    // Update the user's profile picture in the database
+    db.query(
+        'UPDATE users SET profilePicture = ? WHERE id = ?',
+        [filePath, userId],
+        (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Failed to update profile picture' });
+            }
+
+            // Fetch user details and notification preferences
+            db.query(
+                'SELECT email, name, notifications FROM users WHERE id = ?',
+                [userId],
+                (err, results) => {
+                    if (err || results.length === 0) {
+                        return res.status(404).send('User not found');
+                    }
+
+                    const user = results[0];
+
+                    // Check notification preference
+                    if (!user.notifications) {
+                        // If notifications are disabled, skip email and return success
+                        return res.status(200).json({ message: 'Profile picture updated successfully, no notification sent', filePath });
+                    }
+
+                    // Set up email transporter
+                    const transporter = nodemailer.createTransport({
+                        service: 'Gmail',
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS,
+                        },
+                    });
+
+                    const mailOptions = {
+                        to: user.email,
+                        from: 'noreply@yourdomain.com',
+                        subject: 'Profile Picture Updated',
+                        text: `Hello ${user.name},\n\nYour profile picture has been successfully updated.\n\nIf you did not make this change, please contact our support team immediately.\n\nBest regards,\nThe Team`,
+                        html: `<h2>Profile Picture Updated</h2>
+                               <p>Hello ${user.name},</p>
+                               <p>Your profile picture has been successfully updated.</p>
+                               <p>If you did not make this change, please contact our support team immediately.</p>
+                               <p>Best regards,<br/>The Team</p>`,
+                    };
+
+                    // Send confirmation email
+                    transporter.sendMail(mailOptions, (err) => {
+                        if (err) {
+                            console.error('Error sending profile picture update email:', err);
+                            return res.status(500).json({ error: 'Error sending email notification' });
+                        }
+
+                        // Send successful response
+                        res.status(200).json({ message: 'Profile picture updated successfully and notification sent', filePath });
+                    });
+                }
+            );
+        }
+    );
+});
+
+
+// Notification email function
+app.put('/update-notifications', verifyToken, (req, res) => {
+    const userId = req.userId;
+    const { notifications } = req.body;
+
+    // Update notification preferences in the database
+    db.query(
+        'UPDATE users SET notifications = ? WHERE id = ?',
+        [notifications, userId],
+        (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Failed to update notification preference' });
+            }
+
+            // Prepare email notification if notifications are enabled
+            if (notifications) {
+                db.query(
+                    'SELECT email, name FROM users WHERE id = ?',
+                    [userId],
+                    (err, results) => {
+                        if (err || results.length === 0) {
+                            return res.status(404).send('User not found');
+                        }
+
+                        const user = results[0];
+
+                        // Set up email transporter
+                        const transporter = nodemailer.createTransport({
+                            service: 'Gmail',
+                            auth: {
+                                user: process.env.EMAIL_USER,
+                                pass: process.env.EMAIL_PASS,
+                            },
+                        });
+
+                        const mailOptions = {
+                            to: user.email,
+                            from: 'noreply@yourdomain.com',
+                            subject: 'Notification Preferences Updated',
+                            text: `Hello ${user.name},\n\nYour notification preferences have been successfully updated.\n\nBest regards,\nThe Team`,
+                            html: `<h2>Notification Preferences Updated</h2>
+                                   <p>Hello ${user.name},</p>
+                                   <p>Your notification preferences have been successfully updated.</p>
+                                   <p>Best regards,<br/>The Team</p>`,
+                        };
+
+                        // Send confirmation email
+                        transporter.sendMail(mailOptions, (err) => {
+                            if (err) {
+                                console.error('Error sending update email:', err);
+                                return res.status(500).json({ error: 'Error sending email notification' });
+                            }
+
+                            // Send success response only after email is sent
+                            res.status(200).json({ message: 'Notification preference updated successfully and email sent' });
+                        });
+                    }
+                );
+            } else {
+                // If notifications are disabled, return success without email
+                res.status(200).json({ message: 'Notification preference updated successfully, no email sent' });
+            }
+        }
+    );
+});
+
+
+// Deleting user account API endpoint
+app.delete('/api/delete-account', verifyToken, (req, res) => {
+    const userId = req.userId;  // Extract user ID from the JWT token
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    // Step 1: Fetch user details for email notification
+    db.query('SELECT email, name FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err || results.length === 0) {
+            console.error('Error fetching user for email notification:', err);
+            return res.status(500).json({ error: 'Error fetching user details for email' });
+        }
+
+        const user = results[0];
+
+        // Step 2: Set up email transporter
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        const mailOptions = {
+            to: user.email,
+            from: 'noreply@yourdomain.com',
+            subject: 'Account Deletion Confirmation',
+            text: `Hello ${user.name},\n\nYour account has been successfully deleted. We're sorry to see you go.\n\nIf this was a mistake, please contact our support team.\n\nBest regards,\nThe Team`,
+            html: `<h2>Account Deletion Confirmation</h2>
+                   <p>Hello ${user.name},</p>
+                   <p>Your account has been successfully deleted. We're sorry to see you go.</p>
+                   <p>If this was a mistake, please contact our support team.</p>
+                   <p>Best regards,<br/>The Team</p>`,
+        };
+
+        // Step 3: Send confirmation email
+        transporter.sendMail(mailOptions, (err) => {
+            if (err) {
+                console.error('Error sending account deletion email:', err);
+                return res.status(500).json({ error: 'Error sending email notification' });
+            }
+
+            // Step 4: Delete the user account from the database
+            db.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
+                if (err) {
+                    console.error('Error deleting account:', err);
+                    return res.status(500).json({ error: 'Error deleting account' });
+                }
+
+                // Step 5: Send a successful response to the client
+                res.status(200).json({ message: 'Account deleted successfully. A confirmation email has been sent.' });
+            });
+        });
+    });
 });
 
 // Start the server

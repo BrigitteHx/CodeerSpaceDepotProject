@@ -16,7 +16,12 @@ import AboutUsPage from './components/aboutus/AboutUs';
 import FAQPage from './components/faq/FAQPage';
 import FeedbackForm from './components/feedback/FeedbackForm';
 import FloatingChatButton from './components/faq/FloatingChatButton';
-import UserAccountPage from './components/useraccount/UserAccount';
+import PersonalInfoPage from './components/user_account/PersonalInfoPage';
+import DataSharingPage from './components/user_account/DataSharingPage';
+import DashboardPage from './components/user_account/DashboardPage';
+import SettingsPage from './components/user_account/SettingsPage';
+import Sidebar from './components/user_account/Sidebar';
+import UserAccountLayout from './components/user_account/UserAccountLayout';
 import { PrivateRoute, PublicRoute } from './components/routes/PrivateRoute';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import Swal from 'sweetalert2';
@@ -78,8 +83,21 @@ function App() {
             <Route path="/aboutus" element={< AboutUsPage/>} />
             <Route path="/faq" element={< FAQPage/>} />
             <Route path="/feedback" element={<FeedbackForm />} />
-            <Route path="/user-account" element={< UserAccountPage/>} />
             
+            {/* User Account Section (Nested Routes) */}
+            <Route 
+              path="/user-account/*" 
+              element={
+                <PrivateRoute>
+                  <UserAccountLayout />
+                </PrivateRoute>
+              }
+            >
+              <Route path="personal-info" element={<PersonalInfoPage />} />
+              <Route path="data-sharing" element={<DataSharingPage />} />
+              <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
             
             <Route path="/login" element={
               <PublicRoute>

@@ -29,7 +29,7 @@ const DropdownMenu = () => {
         <Link to="/information" className="menu-item" onClick={toggleMenu}>Information</Link>
         <Link to="/SolarDashboard" className="menu-item" onClick={toggleMenu}>Solar Panel Dashboard</Link>
         <Link to="/BatteryDashboard" className="menu-item" onClick={toggleMenu}>Battery Dashboard</Link>
-        <Link to="/user-account" className="menu-item" onClick={toggleMenu}>User Account</Link>
+        <Link to="/user-account/personal-info" className="menu-item" onClick={toggleMenu}>User Account</Link>
         <Link to="/faq" className="menu-item" onClick={toggleMenu}>FAQ</Link>
         <Link to="/contact" className="menu-item" onClick={toggleMenu}>Contact</Link>
         <div className="logout-container">
