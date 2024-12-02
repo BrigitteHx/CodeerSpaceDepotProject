@@ -1,0 +1,394 @@
+/* General Styles */
+.about-page {
+    max-width: 75%;
+    margin: 20px auto;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.about-logo {
+    width: 100px; /* Logo kleiner gemaakt */
+    height: auto;
+    margin: 0 auto 20px auto; /* Centraal uitgelijnd */
+    display: block;
+    border-radius: 50%; /* Maakt de afbeelding rond */
+    background-color: #f8f9fa; /* Subtiele achtergrondcirkel */
+    padding: 10px; /* Ruimte tussen afbeelding en achtergrond */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtiele schaduw voor diepte */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animaties */
+}
+
+.about-logo:hover {
+    transform: scale(1.1); /* Vergoot het logo iets bij hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Intensere schaduw bij hover */
+}
+
+.about-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.about-description {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+/* Accordion Section */
+.accordion {
+    margin-bottom: 40px;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.accordion-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.accordion-header:hover {
+    background-color: #e9ecef;
+}
+
+.accordion-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #333;
+}
+
+.accordion-header span {
+    font-size: 1.5rem;
+    color: #666;
+    transition: transform 0.3s ease-in-out;
+}
+
+.accordion-item.active .accordion-header span {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    padding: 15px 20px;
+    font-size: 1rem;
+    color: #555;
+    display: none;
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+.accordion-item.active .accordion-content {
+    display: block;
+}
+
+.contact-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.contact-info {
+    font-size: 1rem;
+    color: #555;
+}
+
+.contact-info p {
+    margin: 5px 0;
+}
+
+
+/* Animation for Accordion */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mission, Vision, Values Section */
+.mission-section {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.mission-section h2 {
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.mission-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .mission-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card {
+        width: 80%;
+    }
+}
+
+/* Timeline Section */
+.timeline-section {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.timeline-section h2 {
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f0f0f0;
+    width: 60%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.timeline-item p {
+    font-size: 1rem;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .timeline-item {
+        width: 90%;
+    }
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.testimonials-section h2 {
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.testimonials {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.testimonial {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.testimonial p {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #333;
+}
+
+.testimonial span {
+    font-size: 0.9rem;
+    color: #777;
+    display: block;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .testimonials {
+        flex-direction: column;
+        align-items: center;
+    }
+    .testimonial {
+        width: 80%;
+    }
+}
+
+/* Statistics Section */
+.stats-section {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.stats-section h2 {
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.stat {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 20%;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat h3 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.stat p {
+    font-size: 1rem;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .stat {
+        width: 80%;
+    }
+}
+
+.parent-company-section {
+    background: linear-gradient(135deg, #e3f2fd, #f1f8e9); /* Zachte kleurverloop */
+    color: #444; /* Iets donkerdere tekstkleur */
+    padding: 50px 30px;
+    margin: 50px auto;
+    border-radius: 15px; /* Nog zachtere hoeken */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); /* Subtielere en grotere schaduw */
+    text-align: center;
+    max-width: 850px;
+    border: 2px solid #cce7ff; /* Decoratieve rand */
+}
+
+.parent-company-section h3 {
+    font-size: 1.8rem; /* Normale grootte */
+    margin-bottom: 20px;
+    color: #1a237e; /* Diepblauwe kleur voor de titel */
+    font-family: 'Arial', sans-serif; /* Consistent met de rest van de pagina */
+    text-transform: none; /* Geen hoofdletters */
+}
+
+.parent-company-section p {
+    font-size: 1.1rem;
+    line-height: 1.7; /* Grotere regelafstand voor leesbaarheid */
+    color: #555;
+    font-family: 'Arial', sans-serif;
+}
+
+.company-link {
+    color: #0d47a1; /* Diepblauwe linkkleur */
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* Ruimte tussen icoon en tekst */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.company-link:hover {
+    color: #1565c0; /* Lichtere blauwe kleur bij hover */
+    transform: scale(1.1); /* Lichte vergroting */
+}
+
+.company-content {
+    margin: 0 auto;
+    max-width: 700px; /* Beperkt tot kleinere breedte voor meer focus */
+}
