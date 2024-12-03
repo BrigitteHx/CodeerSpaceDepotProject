@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import useRecaptchaV3 from "../captcha/Captcha"; 
 import Swal from 'sweetalert2';
-import { getFunctions, httpsCallable } from 'firebase/functions'; 
 import "./style/RegisterForm.css"; 
 
 const RegisterForm = () => {
@@ -15,6 +14,7 @@ const RegisterForm = () => {
     confirmPassword: "",
     phoneNumber: "",
     location: "",
+    enableMFA: false, // Voeg een nieuwe property toe voor de MFA-optie
   };
   const locations = [
     "Amsterdam",
@@ -43,14 +43,15 @@ const RegisterForm = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+  // Functie om de "Show Password" toggle te beheren
   const toggleShowPassword = () => {
-    setShowPassword((prev) => !prev); // Toggle the state
+    setShowPassword((prev) => !prev);
   };
+
   // Functie om wachtwoordsterkte te valideren
   const validatePasswordStrength = (password) => {
-    const minLength = 8; // Minimale lengte van het wachtwoord
-
-    // Regex voor meer beveiliging (minimaal 8 tekens, 1 hoofdletter, 1 cijfer en 1 speciaal teken)
+    const minLength = 8;
     const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
     if (password.length < minLength) {
@@ -61,7 +62,7 @@ const RegisterForm = () => {
       return 'Password must contain at least 1 uppercase letter, 1 number, and 1 special character.';
     }
 
-    return ''; // Als het wachtwoord geldig is, geef een lege string terug
+    return ''; // Geen fout, wachtwoord is geldig
   };
 
   const handleSubmit = async (e) => {
@@ -73,51 +74,53 @@ const RegisterForm = () => {
     const passwordError = validatePasswordStrength(formData.password);
     if (passwordError) {
       setError(passwordError);
-      setLoading(false); // Stop loading
-      return; // Exit the function
+      setLoading(false); 
+      return;
     }
 
-    // Valideer dat de wachtwoorden overeenkomen
+    // Valideer of de wachtwoorden overeenkomen
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
-      setLoading(false); // Stop loading
-      return; // Exit the function
+      setLoading(false); 
+      return;
     }
 
-    // Validate that the password is at least 8 characters long
+    // Valideer de lengte van het wachtwoord
     if (formData.password.length < 8) {
       setError("Password must be at least 8 characters long");
-      setLoading(false); // Stop loading
-      return; // Exit the function
+      setLoading(false); 
+      return;
     }
 
-    // Validate that phoneNumber contains only numbers
+    // Valideer dat het telefoonnummer alleen cijfers bevat
     const phoneNumberPattern = /^\d+$/;
     if (!phoneNumberPattern.test(formData.phoneNumber)) {
       setError("Phone number must contain only numbers");
-      setLoading(false); // Stop loading
-      return; // Exit the function
+      setLoading(false); 
+      return;
     }
 
-    // Validate that the password is at least 8 characters long
+    // Valideer de lengte van het telefoonnummer
     if (formData.phoneNumber.length < 5) {
       setError("Phone number must be at least 5 numbers long");
-      setLoading(false); // Stop loading
-      return; // Exit the function
+      setLoading(false); 
+      return;
     }
+
     try {
-      // Send the actual form data to the API
+      // Voer de registratie-API-aanroep uit
       await axios.post('http://localhost:5000/api/register', {
         email: formData.email,
         name: formData.name,
         password: formData.password,
         phoneNumber: formData.phoneNumber,
         location: formData.location,
+        enableMFA: formData.enableMFA, // Stuur de MFA-optie mee
       });
 
+      // Toon een succesmelding met Swal
       Swal.fire({
         position: "top-end",
-        iconHeight: 50,
         icon: "success",
         title: "Registration Successful!",
         text: "User registered successfully",
@@ -126,7 +129,8 @@ const RegisterForm = () => {
         customClass: {
           popup: 'swal-small'
         }
-        });
+      });
+
       setIsSubmitted(true); 
     } catch (error) {
       console.log("Error registering:", error);
@@ -145,10 +149,9 @@ const RegisterForm = () => {
       <div className="confirmation-container">
         <h1>Registration Successful!</h1>
         <p>Welcome, {formData.name}! Your account has been successfully created.</p>
-        <p>You can now <strong> <a href="/login">log in</a> </strong> to access your dashboard and start managing your energy consumption.</p>
+        <p>You can now <strong><a href="/login">log in</a></strong> to access your dashboard and start managing your energy consumption.</p>
         <p>Thank you for joining us!</p>
       </div>
-      
     );
   }
 
@@ -156,10 +159,7 @@ const RegisterForm = () => {
     <div className="register-container">
       <div className="register-left-panel">
         <h1>Create your account!</h1>
-        <p>
-          Register to access your personal dashboard and real-time monitoring of
-          your solar yield and battery status.
-        </p>
+        <p>Register to access your personal dashboard and real-time monitoring of your solar yield and battery status.</p>
         <p>Fill in the details to start optimizing your energy management.</p>
       </div>
       <div className="register-right-panel">
@@ -183,9 +183,9 @@ const RegisterForm = () => {
             className="register-input"
             required
           />
-            <div className="input-container">
+          <div className="input-container">
             <input
-              type={showPassword ? "text" : "password"} // Toggle type
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password *"
               value={formData.password}
@@ -199,12 +199,12 @@ const RegisterForm = () => {
               role="button"
               aria-label="Toggle password visibility"
             >
-              {showPassword ? "🙈" : "👁️"} {/* Replace with icons or SVG */}
+              {showPassword ? "🙈" : "👁️"}
             </span>
           </div>
           <div className="input-container">
             <input
-              type={showPassword ? "text" : "password"} // Toggle type
+              type={showPassword ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm password *"
               value={formData.confirmPassword}
@@ -218,7 +218,7 @@ const RegisterForm = () => {
               role="button"
               aria-label="Toggle password visibility"
             >
-              {showPassword ? "🙈" : "👁️"} {/* Replace with icons or SVG */}
+              {showPassword ? "🙈" : "👁️"}
             </span>
           </div>
           <input
@@ -237,15 +237,26 @@ const RegisterForm = () => {
             className="register-input"
             required
           >
-            <option value="" disabled>
-            Choose a location *
-            </option>
+            <option value="" disabled>Choose a location *</option>
             {locations.map((location) => (
               <option key={location} value={location}>
                 {location}
               </option>
             ))}
           </select>
+
+          {/* MFA-optie */}
+          <div>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={formData.enableMFA}
+                    onChange={(e) => setFormData({ ...formData, enableMFA: e.target.checked })}
+                />
+                Activeer MFA
+            </label>
+          </div>
+
           <div className="register-checkbox-container">
             <input type="checkbox" id="terms" required />
             <label htmlFor="terms">
@@ -255,9 +266,9 @@ const RegisterForm = () => {
           </div>
           
           <div className="register-button-container">
-          <button type="submit" className="register-submit-button" disabled={loading}>
-            {loading ? "Registering..." : "Sign up"}
-          </button>
+            <button type="submit" className="register-submit-button" disabled={loading}>
+              {loading ? "Registering..." : "Sign up"}
+            </button>
             <button type="button" className="register-cancel-button" onClick={handleCancel}>Cancel</button>
           </div>
           {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}

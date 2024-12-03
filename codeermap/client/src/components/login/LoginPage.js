@@ -5,7 +5,7 @@ import ErrorAlert from "./ErrorAlert";
 import SuccessAlert from "./SuccessAlert";
 import LoginButtons from "./LoginButtons";
 import useRecaptchaV3 from "../captcha/Captcha"; 
-import { useAuth } from "../AuthContext"; // Import useAuth from AuthContext
+import { useAuth } from "../AuthContext"; 
 import "./style/LoginPage.css";
 
 const LoginForm = () => {
@@ -21,7 +21,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { login } = useAuth(); // Get login function from AuthContext
+  const { login } = useAuth(); 
 
   // Initialize reCAPTCHA
   const executeRecaptcha = useRecaptchaV3('6Lc_A2EqAAAAANr-GXLMhgjBdRYWKpZ1y-YwF7Mk', 'login');
@@ -58,19 +58,22 @@ const LoginForm = () => {
         token: recaptchaToken,
       };
 
-      const response = await axios.post('http://localhost:5000/api/login', data); // Use login function from AuthContext to set the login state and store the token
-      const { token } = response.data;
+      const response = await axios.post('http://localhost:5000/api/login', data);
+      const { token, mfaEnabled } = response.data;
 
-      // Use login function from AuthContext to set the login state and store the token
-      await login(token); 
+      // Set login state and token
+      await login(token);
 
-      setLoginAttempts(0);
-      showAlert('Login Successful', 'Redirecting...', 'success'); // Show success alert
+      if (mfaEnabled) {
+        // Verzenden van de MFA-code naar de gebruiker voordat je navigeert
+        await axios.post('http://localhost:5000/api/send-mfa-code', { email: formData.email });
 
-      setTimeout(() => {
-        navigate('/home'); // Redirect to the dashboard after successful login
-      }, 1000);
-
+        // Redirect naar de MFA-verificatiepagina
+        navigate('/mfa-verification', { state: { email: formData.email } });
+      } else {
+        // Redirect naar de home-pagina als MFA niet ingeschakeld is
+        navigate('/home');
+      }
     } catch (error) {
       handleError(error);
     } finally {
@@ -79,7 +82,7 @@ const LoginForm = () => {
   };
 
   const handleCancel = () => {
-    navigate('/'); // Redirect to the welcome page
+    navigate('/'); 
   };
 
   const handleError = (error) => {
@@ -108,7 +111,7 @@ const LoginForm = () => {
       id: Date.now(),
       title,
       message,
-      type, // Include alert type (error or success)
+      type,
       fading: false,
     };
     setAlerts(prev => [...prev, newAlert]);

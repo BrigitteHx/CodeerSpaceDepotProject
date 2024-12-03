@@ -88,34 +88,31 @@ const verifyToken = (req, res, next) => {
 
 // Register endpoint
 app.post('/api/register', (req, res) => {
-    const { email, name, password, phoneNumber, location } = req.body;
+    // Haal alle waarden uit de request body, inclusief enableMFA
+    const { email, name, password, phoneNumber, location, enableMFA } = req.body;
 
-    // Validate required fields
-    if (!email || !name || !password || !phoneNumber || !location) {
-        return res.status(400).send('All fields are required');
-    }
+    // Controleer of enableMFA goed is gedefinieerd
+    console.log('MFA inschakelen:', enableMFA);
 
-    // Hash the password
     const hashedPassword = bcrypt.hashSync(password, 8);
 
-    // Add user to the database
-    db.query('INSERT INTO users (email, name, password, phoneNumber, location) VALUES (?, ?, ?, ?, ?)', 
-        [email, name, hashedPassword, phoneNumber, location], (err, result) => {
+    // Voeg de gebruiker toe aan de database, inclusief de mfa_enabled kolom
+    db.query('INSERT INTO users (email, name, password, phoneNumber, location, mfa_enabled) VALUES (?, ?, ?, ?, ?, ?)',
+        [email, name, hashedPassword, phoneNumber, location, enableMFA], (err, result) => {
             if (err) {
-                console.error('Error registering user:', err.code); // Log error code
-                console.error('Error message:', err.message); // Log error message
-                return res.status(500).send('Error registering user'); // Return error response
+                console.error('Error registering user:', err);
+                return res.status(500).send('Error registering user');
             }
             res.status(200).send('User registered successfully');
-        }
-    );
+        });
 });
+
 
 // Login endpoint
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    // Find the user by email
+    // Zoek de gebruiker op basis van het e-mailadres
     db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
         if (err || results.length === 0) {
             return res.status(401).send('User not found');
@@ -123,15 +120,21 @@ app.post('/api/login', (req, res) => {
 
         const user = results[0];
 
-        // Compare the password
+        // Vergelijk het wachtwoord met het gehashte wachtwoord in de database
         const passwordIsValid = bcrypt.compareSync(password, user.password);
         if (!passwordIsValid) {
             return res.status(401).send('Invalid password');
         }
 
-        // Generate a token
-        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: 86400 }); // 24 hours
-        res.status(200).send({ auth: true, token: token });
+        // Genereer een JWT-token
+        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: 86400 }); // 24 uur
+
+        // Verstuur de response met de token en mfa_enabled status
+        res.status(200).send({
+            auth: true,
+            token: token,
+            mfaEnabled: user.mfa_enabled // Voeg deze toe om aan te geven of MFA is ingeschakeld
+        });
     });
 });
 
@@ -748,6 +751,82 @@ app.delete('/api/delete-account', verifyToken, (req, res) => {
         });
     });
 });
+
+// MFA code
+
+app.post('/api/setup-mfa', verifyToken, (req, res) => {
+    const { email } = req.body;
+
+    // Genereer een tijdelijke secret
+    const secret = crypto.randomBytes(20).toString('hex'); 
+
+    // Update de database met de secret en activeer MFA
+    req.db.query('UPDATE users SET mfa_secret = ?, mfa_enabled = 1 WHERE email = ?', [secret, email], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Fout bij het instellen van MFA.');
+        }
+        res.status(200).send('MFA succesvol ingeschakeld.');
+    });
+});
+
+const transporter = nodemailer.createTransport({
+    service: 'Gmail', // Pas dit aan afhankelijk van je e-mailprovider
+    auth: {
+        user: 'contactpaginatest@gmail.com',
+        pass: 'mhkm nhvz pmit lyud'  // Zet je wachtwoord in .env
+    },
+});
+
+app.post('/api/send-mfa-code', (req, res) => {
+    const { email } = req.body;
+
+    // Genereer een 6-cijferige code en stel een vervaltijd in
+    const mfaCode = crypto.randomInt(100000, 999999).toString();
+    const expirationTime = Date.now() + 5 * 60 * 1000; // 5 minuten geldig
+
+    // Update de database met de gegenereerde code
+    req.db.query('UPDATE users SET mfa_code = ?, mfa_expiry = ? WHERE email = ?', [mfaCode, expirationTime, email], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Fout bij het genereren van MFA-code.');
+        }
+
+        // Verstuur de e-mail
+        transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Uw MFA-code',
+            text: `Uw MFA-code is: ${mfaCode}`,
+        }, (mailErr) => {
+            if (mailErr) {
+                console.error(mailErr);
+                return res.status(500).send('Fout bij het verzenden van e-mail.');
+            }
+            res.status(200).send('MFA-code verzonden.');
+        });
+    });
+});
+
+app.post('/api/verify-mfa', (req, res) => {
+    const { email, code } = req.body;
+
+    // Haal de opgeslagen code en vervaltijd op uit de database
+    req.db.query('SELECT mfa_code, mfa_expiry FROM users WHERE email = ?', [email], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(400).send('Gebruiker niet gevonden.');
+        }
+
+        const { mfa_code, mfa_expiry } = results[0];
+
+        // Controleer of de code geldig is en niet verlopen
+        if (mfa_code === code && Date.now() < mfa_expiry) {
+            return res.status(200).send('MFA succesvol.');
+        }
+        res.status(401).send('MFA-code ongeldig of verlopen.');
+    });
+});
+
 
 // Start the server
 app.listen(PORT, () => {

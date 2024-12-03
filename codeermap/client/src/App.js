@@ -24,6 +24,7 @@ import Sidebar from './components/user_account/Sidebar';
 import UserAccountLayout from './components/user_account/UserAccountLayout';
 import { PrivateRoute, PublicRoute } from './components/routes/PrivateRoute';
 import { AuthProvider, useAuth } from './components/AuthContext';
+import MfaVerificationPage from './components/mfa/MfaVerificationPage';
 import Swal from 'sweetalert2';
 import './App.css';
 
@@ -84,6 +85,12 @@ function App() {
             <Route path="/faq" element={< FAQPage/>} />
             <Route path="/feedback" element={<FeedbackForm />} />
             
+            <Route path="/mfa-verification" element={
+              <PrivateRoute requireMfa>
+                <MfaVerificationPage />
+              </PrivateRoute>
+            } />
+
             {/* User Account Section (Nested Routes) */}
             <Route 
               path="/user-account/*" 
