@@ -1,26 +1,20 @@
-import React, { useEffect } from 'react';
-import Swal from 'sweetalert2';
+import React from 'react';
 import './style/SuccesAlert.css';
 
-const SuccessAlert = ({ title, message, onClose, className }) => {
-  useEffect(() => {
-    Swal.fire({
-      position: "top-end",
-      iconHeight: 50,
-      icon: "success", // You had "error" which may not be intended for a success alert.
-      title: title, // Pass title as a string, not as {title}
-      text: message, // Pass message as a string, not as {message}
-      showConfirmButton: false,
-      timer: 1500,
-      customClass: {
-        popup: 'swal-small',
-      },
-    }).then(() => {
-      if (onClose) onClose(); // Optional callback after alert closes
-    });
-  }, [title, message, onClose]); // Dependencies to re-run the effect if props change
-
-  return null; // This component doesn't render any UI, it just triggers the alert
+const SuccessAlert = ({ id, title, message, onClose, className }) => {
+  return (
+    <div className={`success-alert ${className}`} role="alert">
+      <div className="success-alert-content">
+        <div className="success-alert-icon" onClick={() => onClose(id)}>
+          <span className="success-alert-close">✖</span>
+        </div>
+        <div className="success-alert-text">
+          <strong>{title}</strong>
+          <p>{message}</p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default SuccessAlert
+export default SuccessAlert;

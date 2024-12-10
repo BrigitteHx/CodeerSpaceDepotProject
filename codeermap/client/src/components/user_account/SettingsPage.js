@@ -10,14 +10,11 @@ const SettingsPage = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState("English");
-  const [fontSize, setFontSize] = useState("Medium");
-  const [privacy, setPrivacy] = useState("Public");
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const { userData, setUserData, token } = useAuth();
 
-  // Use effect to get user settings from API
+  // Use effect to get user settings from API or localStorage
   useEffect(() => {
     if (token) {
       const authToken = localStorage.getItem("authToken");
@@ -28,6 +25,7 @@ const SettingsPage = () => {
         })
         .then((response) => {
           setUserData(response.data.user);
+          setTwoFactorAuth(response.data.user.mfa_enabled); // Sync MFA status
         })
         .catch((err) => {
           console.error("Failed to load user data:", err);
@@ -37,6 +35,17 @@ const SettingsPage = () => {
             text: "Failed to load user data. Please try again later.",
           });
         });
+    }
+
+    // Set the initial state based on localStorage
+    const savedNotifications = localStorage.getItem("notifications");
+    if (savedNotifications !== null) {
+      setNotifications(JSON.parse(savedNotifications));
+    }
+
+    const savedTwoFactor = localStorage.getItem("twoFactorAuth");
+    if (savedTwoFactor !== null) {
+      setTwoFactorAuth(JSON.parse(savedTwoFactor));
     }
   }, [token, setUserData]);
 
@@ -52,33 +61,61 @@ const SettingsPage = () => {
   };
 
   // Function to handle Two Factor Auth
-  const handleTwoFactorToggle = () => {
+  const handleTwoFactorToggle = async () => {
+  // Check if the user is already logged in
+  if (userData && userData.loggedIn) { // Assuming userData has a `loggedIn` flag or similar logic
+    Swal.fire({
+      icon: 'warning',
+      title: 'Action Required',
+      text: 'To enable two-factor authentication, you need to log out first. Please log out and then try again.',
+      showConfirmButton: true,
+    });
+    return;
+  }
+
+  // Proceed with toggling MFA only if the user is not logged in
+  const action = twoFactorAuth ? "disable" : "enable";
+  try {
+    const response = await axios.post('http://localhost:5000/api/toggle-mfa', {
+      email: userData.email,
+      action: action
+    });
+
+    // Update the UI state based on success
     setTwoFactorAuth(!twoFactorAuth);
     Swal.fire({
-      icon: 'info',
-      title: twoFactorAuth ? 'Two-Factor Authentication Disabled' : 'Two-Factor Authentication Enabled',
-      text: `You have ${twoFactorAuth ? "disabled" : "enabled"} two-factor authentication.`,
+      icon: 'success',
+      title: response.data.message,
+      text: `You have ${action === "enable" ? "enabled" : "disabled"} two-factor authentication.`,
       timer: 1500,
       showConfirmButton: false
     });
-  };
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Failed to toggle MFA. Please try again later.',
+    });
+  }
+};
+
 
   // Function to handle notifications toggle
   const handleNotificationToggle = async () => {
     try {
-      const authToken = localStorage.getItem("authToken");
       const newStatus = !notifications;
       setNotifications(newStatus);
+      localStorage.setItem("notifications", JSON.stringify(newStatus)); // Save to localStorage
 
       await axios.put('http://localhost:5000/update-notifications', {
         notifications: newStatus
       }, {
           headers: {
-              Authorization: `Bearer ${authToken}`, 
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`, 
               "Content-Type": "application/json",
           },
-      })
-      
+      });
+
       Swal.fire({
         icon: 'success',
         title: 'Notification Setting Updated',
@@ -95,7 +132,7 @@ const SettingsPage = () => {
       });
     }
   };
-  
+
   // Function to handle password reset
   const handlePasswordReset = async (e) => {
     e.preventDefault();

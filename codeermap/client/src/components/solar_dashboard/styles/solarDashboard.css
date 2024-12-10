@@ -42,9 +42,14 @@
     border-radius: 20px;
     padding: 20px;
     transition: .5s;
+    border: 2px solid transparent;
 }
 
 .card {
+    display: flex;
+}
+
+.card .card-information {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -60,6 +65,13 @@
 
 .card:hover, canvas:hover, .performance-monitoring:hover {
     transform: scale(1.05);
+    border-color: #1b3b73;
+}
+
+.card-graph {
+    width: 49%;
+    display: flex;
+    align-items: center;
 }
 
 .performance-monitoring {
@@ -74,4 +86,12 @@
 .capacity-yield {
     display: inherit;
     justify-content: space-around;
+    background-color: #f4f4f4;
+    border-radius: 20px;
+}
+
+.solar-dashboard .card-container canvas {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
 }

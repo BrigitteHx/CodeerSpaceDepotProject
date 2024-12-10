@@ -69,6 +69,26 @@ body {
     display: flex;
     gap: 20px;
 }
+
+.bron_link{
+    display: inline-block;
+    margin-top: 15px;
+    color: #007bff; /* Blauwe kleur */
+    font-size: 14px;
+    text-decoration: none; /* Verwijder onderstreping */
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect voor de link */
+  .bron_link:hover {
+    background-color: #007bff; /* Donkerblauw bij hover */
+    color: #fff; /* Witte tekst bij hover */
+  }
+  
+
 /* Responsive Design */
 @media (max-width: 768px) {
 .charts-container {

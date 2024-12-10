@@ -47,6 +47,19 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  width: 100%;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 1px;
+  top: 35%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 
 .register-submit-button {
@@ -203,48 +216,4 @@
   font-size: 14px;
   padding: 10px 15px;
 }
-.show-password-button {
-  background: none;
-  border: none;
-  color: #007bff; /* Adjust to match your theme */
-  cursor: pointer;
-  font-size: 0.9em; /* Slightly smaller text */
-  margin-left: -50px; /* Align with input */
-  padding: 0;
-}
 
-.show-password-button:hover {
-  text-decoration: underline;
-}
-
-.register-input {
-  width: calc(100% - 60px); /* Ensure inputs adjust with the button */
-}
-/* Wrapper for the input field and the icon */
-.input-container {
-  position: relative;
-  width: 100%;
-}
-
-/* Adjust input field to accommodate the icon */
-.register-input {
-  width: 100%;
-  padding-right: 40px; /* Space for the eye icon */
-  box-sizing: border-box; /* Ensure proper alignment */
-}
-
-/* Eye icon positioning */
-.eye-icon {
-  position: absolute;
-  right: 10px; /* Align to the right of the input */
-  top: 30%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 18px; /* Adjust size to fit design */
-  color: #007bff; /* Matches your theme */
-}
-
-/* Hover effect for the eye icon */
-.eye-icon:hover {
-  color: #0056b3; /* Slightly darker shade on hover */
-}

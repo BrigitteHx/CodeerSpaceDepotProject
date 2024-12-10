@@ -87,6 +87,7 @@ const BatteryDashboard = () => {
   };
 
   return (
+    <div className='battery-dashboard'>
     <Box sx={{ padding: '20px' }}>
       {/* Sidebar */}
       <Drawer
@@ -112,8 +113,92 @@ const BatteryDashboard = () => {
 
       {/* Main Grid for Layout */}
       <Grid container spacing={3}>
+        
+
+        {/* Right Side: Energy Usage */}
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} sx={{ padding: '20px', borderRadius: '20px' }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+              Energy Usage
+            </Typography>
+            <EnergyUsageChart />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} sx={{ padding: '20px', borderRadius: '20px' }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+              Savings
+            </Typography>
+            <SavingsChart />
+          </Paper>
+        </Grid>
+      </Grid>
+      
+
+      {/* Savings Box */}
+      <Grid container spacing={3} sx={{ marginTop: '20px' }}>
+
+        {/* Battery Health Box */}
+        <Grid item xs={12} md={6}>
+            <Paper elevation={3} sx={{ padding: '20px', textAlign: 'center', borderRadius: '20px', display: 'flex', flexDirection: 'column'  }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Battery Health</Typography>
+              <div className='battery'>
+                <BatteryHealth />
+                <Box sx={{ textAlign: 'left', marginTop: '10px' }}>
+                  <Typography>Battery condition: Normal</Typography>
+                  <Typography>Maximum capacity: 85%</Typography>
+                  <Typography>Number of cycles: 642</Typography>
+                  <Typography>Production Date: March 2024</Typography>
+                  <Typography>First Use Date: October 2024</Typography>
+                </Box>
+              </div>
+              
+            </Paper>
+        </Grid>
+        
+
         {/* Left Side: Battery Status */}
         <Grid item xs={12} md={6}>
+                    {/* Small Boxes Under Battery Status */}
+                    <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
+            {/* Total Savings 30 Days */}
+            <Grid item xs={12} sm={4}>
+              <Paper elevation={3} sx={{ padding: '15px', textAlign: 'center', borderRadius: '20px' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                  Total Savings 30 Days
+                </Typography>
+                <Typography variant="h6" sx={{ color: '#4caf50', marginTop: '10px' }}>
+                  €123,72
+                </Typography>
+              </Paper>
+            </Grid>
+
+            {/* Total Savings 7 Days */}
+            <Grid item xs={12} sm={4}>
+              <Paper elevation={3} sx={{ padding: '15px', textAlign: 'center', borderRadius: '20px' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                  Total Savings 7 Days
+                </Typography>
+                <Typography variant="h6" sx={{ color: '#2196f3', marginTop: '10px' }}>
+                  €15,52
+                </Typography>
+              </Paper>
+            </Grid>
+
+            {/* Total Savings */}
+            <Grid item xs={12} sm={4}>
+              <Paper elevation={3} sx={{ padding: '15px', textAlign: 'center', borderRadius: '20px' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                  Total Savings
+                </Typography>
+                <Typography variant="h6" sx={{ color: '#ff9800', marginTop: '10px' }}>
+                  €927,87
+                </Typography>
+              </Paper>
+            </Grid> 
+          </Grid>
+
           <Paper
             elevation={3}
             sx={{
@@ -121,6 +206,7 @@ const BatteryDashboard = () => {
               display: 'flex',
               alignItems: 'center',
               backgroundColor: '#ffffff',
+              borderRadius: '20px'
             }}
           >
             {/* Battery Icon */}
@@ -177,90 +263,11 @@ const BatteryDashboard = () => {
               </Button>
             </Box>
           </Paper>
-
-          {/* Small Boxes Under Battery Status */}
-          <Grid container spacing={2} sx={{ marginTop: '20px' }}>
-            {/* Total Savings 30 Days */}
-            <Grid item xs={12} sm={4}>
-              <Paper elevation={3} sx={{ padding: '15px', textAlign: 'center' }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  Total Savings 30 Days
-                </Typography>
-                <Typography variant="h6" sx={{ color: '#4caf50', marginTop: '10px' }}>
-                  €123,72
-                </Typography>
-              </Paper>
-            </Grid>
-
-            {/* Total Savings 7 Days */}
-            <Grid item xs={12} sm={4}>
-              <Paper elevation={3} sx={{ padding: '15px', textAlign: 'center' }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  Total Savings 7 Days
-                </Typography>
-                <Typography variant="h6" sx={{ color: '#2196f3', marginTop: '10px' }}>
-                  €15,52
-                </Typography>
-              </Paper>
-            </Grid>
-
-            {/* Total Savings */}
-            <Grid item xs={12} sm={4}>
-              <Paper elevation={3} sx={{ padding: '15px', textAlign: 'center' }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  Total Savings
-                </Typography>
-                <Typography variant="h6" sx={{ color: '#ff9800', marginTop: '10px' }}>
-                  €927,87
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {/* Right Side: Energy Usage */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: '20px' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Energy Usage
-            </Typography>
-            <EnergyUsageChart />
-          </Paper>
-        </Grid>
-      </Grid>
-
-      {/* Savings Box */}
-      <Grid container spacing={3} sx={{ marginTop: '20px' }}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: '20px' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Savings
-            </Typography>
-            <SavingsChart />
-            <Box sx={{ textAlign: 'left', marginTop: '10px' }}>
-              <Typography>Total Savings 30 days: €123,72</Typography>
-              <Typography>Total Savings 7 days: €15,52</Typography>
-              <Typography>Total Savings: €927,87</Typography>
-            </Box>
-          </Paper>
-        </Grid>
-
-        {/* Battery Health Box */}
-        <Grid item xs={12} md={3}>
-          <Paper elevation={3} sx={{ padding: '20px', textAlign: 'center' }}>
-            <Typography variant="h6">Battery Health</Typography>
-            <BatteryHealth />
-            <Box sx={{ textAlign: 'left', marginTop: '10px' }}>
-              <Typography>Battery condition: Normal</Typography>
-              <Typography>Maximum capacity: 85%</Typography>
-              <Typography>Number of cycles: 642</Typography>
-              <Typography>Production Date: March 2024</Typography>
-              <Typography>First Use Date: October 2024</Typography>
-            </Box>
-          </Paper>
         </Grid>
       </Grid>
     </Box>
+
+    </div>
   );
 };
 

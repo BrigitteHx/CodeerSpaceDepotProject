@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';  // Zorg ervoor dat je deze import hebt
+import { useAuth } from '../AuthContext';
 import './style/DropdownMenu.css';
 
 const DropdownMenu = () => {
-  const { logout } = useAuth();  // Haal de logout functie op uit AuthContext
-  const navigate = useNavigate();  // Gebruik de navigate functie voor redirects
+  const { logout } = useAuth(); 
+  const navigate = useNavigate();  
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -13,8 +13,8 @@ const DropdownMenu = () => {
   };
 
   const handleLogout = () => {
-    logout();  // Roep de logout functie aan
-    navigate('/login');  // Redirect naar de loginpagina
+    logout();
+    navigate('/login'); 
   };
 
   return (

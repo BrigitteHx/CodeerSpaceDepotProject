@@ -151,7 +151,7 @@ const MyChatBot = () => {
                 try {
                     console.log('Sending email with data:', emailData); // Debugging log
         
-                    const response = await fetch('http://localhost:3000/api/send-email', {
+                    const response = await fetch('http://localhost:5000/api/send-email', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

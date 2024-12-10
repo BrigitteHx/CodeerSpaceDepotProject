@@ -1,0 +1,68 @@
+.sunshine-hours-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .chart-filters {
+    margin-bottom: 20px;
+  }
+  
+  .chart-filters label {
+    margin-right: 15px;
+  }
+  
+  .charts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .chart-item {
+    flex: 1;
+    min-width: 45%;
+  }
+  
+  .sunshine-duration-table {
+    margin-top: 30px;
+    max-width: 800px; /* Limit the max width of the table */
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.9rem; /* Make text a little smaller */
+  }
+  
+  .sunshine-duration-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .sunshine-duration-table th,
+  .sunshine-duration-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .sunshine-duration-table th {
+    background-color: #f4f4f4; /* Light background for headers */
+    font-weight: bold;
+  }
+  
+  .sunshine-duration-table td {
+    font-size: 0.85rem; /* Smaller text for the table data */
+  }
+  
+  .sunshine-duration-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Stripe effect for alternate rows */
+  }
+  
+  .sunshine-duration-table tr:hover {
+    background-color: #e9e9e9; /* Hover effect */
+  }
+  
+  .attribution {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  

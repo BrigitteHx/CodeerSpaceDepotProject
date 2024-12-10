@@ -1,0 +1,62 @@
+/* SimulatieResults Styles */
+.simulatie-results-container {
+  padding: 2rem;
+  background-color: #f7f7f7;
+}
+
+.simulatie-results-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.loading-message,
+.no-results-message {
+  text-align: center;
+  color: #777;
+  font-size: 1.2rem;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.result-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.result-card:hover {
+  transform: translateY(-5px);
+}
+
+.result-card h2 {
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.result-details {
+  list-style: none;
+  padding: 0;
+}
+
+.result-details li {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.result-details li strong {
+  color: #333;
+}
+
+.result-details li svg {
+  margin-right: 0.5rem;
+  color: #0056b3;
+}
+

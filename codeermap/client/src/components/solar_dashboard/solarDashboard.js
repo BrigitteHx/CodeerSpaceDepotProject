@@ -1,16 +1,35 @@
 import React from 'react';
 import Card from './card';
-import Chart from './chart';
+import Chart from './energy_chart';
 import "./styles/solarDashboard.css"; 
 
 function SolarDashboard() {
     console.log("SolarDashboard component rendered");
-  return (
+
+    const dailyRevenueChartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        data: [200, 300, 400, 500],
+        label: 'Revenue (€)',
+      };
+    
+      const consumptionChartData = {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        data: [100, 120, 110, 130],
+        label: 'Consumption (kWh)',
+      };
+
+      const estimatedSavings = {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        data: [10, 12, 11, 9],
+        label: 'Savings (€)',
+      };
+      
+return (
     <div className="solar-dashboard">
         <div className="card-container">
-            <Card title="Daily Revenue" value="14.450" />
-            <Card title="Consumption" value="14.450 kWh" />
-            <Card title="Estimated Savings" value="€ 14.450" />
+            <Card title="Daily Revenue" value="€ 14.450" chartData={dailyRevenueChartData} />
+            <Card title="Consumption" value="14.450 kWh" chartData={consumptionChartData} />
+            <Card title="Estimated Savings" value="€ 14.450" chartData={estimatedSavings} />
         </div>
 
         <div className='second-row'>
@@ -45,7 +64,7 @@ function SolarDashboard() {
         </div>
 
     </div>
-  );
+);
 }
 
 export default SolarDashboard;
