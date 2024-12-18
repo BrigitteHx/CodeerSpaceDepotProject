@@ -1,5 +1,5 @@
 import React from 'react';
-import './style/AboutUsPage.css';
+import './style/AboutUs.css';
 import { FaSolarPanel, FaBatteryFull, FaWarehouse } from 'react-icons/fa';
 import { GiSolarPower } from 'react-icons/gi';
 import { FiUsers } from 'react-icons/fi';
