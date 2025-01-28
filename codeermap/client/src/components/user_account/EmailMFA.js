@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAuth } from "../AuthContext";
-import "./style/LoginPage.css";
+import "../login/style/LoginPage.css";
 
-const MfaVerificationPage = ({ email, onMFAVerified }) => {
+const EmailMFA = ({ email, onMFAVerified }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
   const { setMfaVerified } = useAuth();
+  
+  // useEffect to fetch and set MFA method and verify MFA status
+  useEffect(() => {
+    // Fetch MFA setup for the given email
+    axios
+      .post("http://localhost:5000/api/setup-mfa", { email })
+      .then((response) => {
+        // Optionally handle success logic here
+      })
+      .catch(() => setError("Error while fetching MFA setup"));
 
+    // Fetch MFA enabled status for the user
+    axios
+      .get("http://localhost:5000/api/check-mfa-enabled", { params: { email } })
+      .then((response) => {
+        // Handle MFA enabled response logic here if needed
+      })
+      .catch(() => setError("Error while checking MFA status"));
+  }, [email]);
+
+  // Function to verify the MFA code
   const handleVerify = async () => {
     if (!/^\d+$/.test(code)) {
       Swal.fire({
@@ -26,20 +43,26 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
 
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/verify-mfa-email", { email, code });
-      Swal.fire({
-        title: "Success!",
-        text: "Verification successful. You will be redirected to the homepage.",
-        icon: "success",
-        confirmButtonText: "OK",
-      }).then(() => {
-        setMfaVerified(true);
-        navigate("/home");
-      });
+      // Send the MFA code and email to the backend for verification
+      const response = await axios.post("http://localhost:5000/api/verify-mfa-email", { email, code });
+
+      if (response.status === 200) {
+        // If verification is successful
+        Swal.fire({
+          title: "Success!",
+          text: "Verification successful. The page will refresh.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          setMfaVerified(true); // Mark MFA as verified
+          window.location.reload();  // Refresh the page to reflect MFA status
+        });
+      }
     } catch (err) {
+      // Error handling for failed verification
       Swal.fire({
         title: "Error",
-        text: "Invalid or expired code. Please try again.",
+        text: err.response?.data?.message || "Invalid or expired code. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -49,6 +72,7 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
     }
   };
 
+  // Function to resend the MFA code
   const handleResendCode = async () => {
     setLoading(true);
     try {
@@ -62,11 +86,11 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
     } catch (err) {
       Swal.fire({
         title: "Error",
-        text: "Error while resending the code.",
+        text: err.response?.data?.message || "Error when resending the code.",
         icon: "error",
         confirmButtonText: "OK",
       });
-      setError("Error while resending the code.");
+      setError("Error when resending the code.");
     } finally {
       setLoading(false);
     }
@@ -88,7 +112,11 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
           className="login-input"
         />
         <div className="login-form">
-          <button onClick={handleVerify} disabled={loading} className="login">
+          <button 
+            onClick={handleVerify} 
+            disabled={loading || !code}  // Disable if no code or loading
+            className="login"
+          >
             {loading ? "Verifying..." : "Verify"}
           </button>
           <button
@@ -96,12 +124,13 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
             disabled={loading}
             className="cancel-button"
           >
-            {loading ? "Sending..." : "Click to resend code."}
+            {loading ? "Sending..." : "Click to resend code"}
           </button>
         </div>
+        {error && <div className="error-message">{error}</div>}  {/* Display error if any */}
       </div>
     </div>
   );
 };
 
-export default MfaVerificationPage;
+export default EmailMFA;

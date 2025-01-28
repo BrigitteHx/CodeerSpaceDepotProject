@@ -1,0 +1,329 @@
+.simulation-form {
+  background: linear-gradient(135deg, #f9f9f9, #e8f3fc);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  font-family: 'Roboto', sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.simulation-form h2 {
+  text-align: center;
+  color: #000;
+  margin-bottom: 20px;
+  font-size: 30px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.simulation-form .form-description {
+  text-align: center;
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.simulation-form .form-section {
+  margin-bottom: 25px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.simulation-form .form-section:hover {
+  transform: scale(1.02);
+}
+
+.simulation-form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.simulation-form input,
+.simulation-form select {
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.simulation-form input:focus,
+.simulation-form select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
+
+.simulation-form .label-text {
+  font-weight: bold;
+  color: #444;
+  font-size: 15px;
+}
+
+.simulation-form .tooltip {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #007bff;
+  position: relative;
+}
+
+.simulation-form .tooltip-text {
+  visibility: hidden;
+  width: 240px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  z-index: 1;
+  font-size: 14px;
+}
+.simulation-form  .preset-description {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.simulation-form .tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.simulation-form .submit-btn,
+.simulation-form .set-average-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.simulation-form .submit-btn:hover,
+.simulation-form .set-average-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.simulation-form .submit-btn:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+
+.simulation-form .set-average-btn {
+  background-color: #28a745;
+}
+
+.simulation-form .set-average-btn:hover {
+  background-color: #218838;
+}
+
+.simulation-form .chart-container {
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.simulation-form  .checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.simulation-form  .checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.simulation-form .preset-btn {
+  padding: 10px 20px;
+  margin: 10px 5px;
+  background-color: #1D3F75;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.simulation-form .preset-btn:hover {
+  background-color: #3868b7; 
+  transform: translateY(-2px);
+}
+
+.simulation-form .preset-btn:active {
+  background-color: #0d5968;
+}
+
+.simulation-form .preset-btn.active {
+  background-color: #F89820; 
+  box-shadow: 0 0 8px rgba(223, 169, 23, 0.6);
+}
+
+.simulation-form .step-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.simulation-form .step {
+  position: relative;
+  width: 20%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.simulation-form .step:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #e8f3fc;
+  border: 2px solid #007bff;
+  z-index: 1;
+}
+
+.simulation-form .step.active:before {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.simulation-form .step .step-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: #007bff;
+}
+
+.simulation-form .step.completed {
+  color: #28a745;
+}
+
+.simulation-form .step.completed:before {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.simulation-form .step-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff;
+  z-index: 0;
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+.simulation-form .step.active + .step-line {
+  background-color: #007bff;
+}
+
+.simulation-form .step.completed + .step-line {
+  background-color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .simulation-form {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .simulation-form h2 {
+    font-size: 24px;
+  }
+
+  .simulation-form .form-description {
+    font-size: 14px;
+  }
+
+  .simulation-form .form-section {
+    padding: 10px;
+  }
+
+  .simulation-form input,
+  .simulation-form select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .simulation-form .submit-btn,
+  .simulation-form .set-average-btn {
+    font-size: 16px;
+    padding: 10px;
+  }
+  .simulation-form .step-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .simulation-form .step {
+    width: auto;
+    margin-bottom: 20px;
+  }
+
+  .simulation-form .step-line {
+    display: none;
+  }
+}

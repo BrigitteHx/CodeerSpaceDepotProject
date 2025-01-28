@@ -1,0 +1,29 @@
+.sunshine-hours-container {
+    font-family: Arial, sans-serif;
+    padding: 5px;
+  }
+
+  .sunshine-hours-container  .chart-filters {
+    margin-bottom: 20px;
+  }
+
+  .sunshine-hours-container  .chart-filters label {
+    margin-right: 15px;
+  }
+
+  .sunshine-hours-container  .charts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .sunshine-hours-container  .chart-item {
+    flex: 1;
+    min-width: 45%;
+  }
+
+  .sunshine-hours-container .attribution {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+  }

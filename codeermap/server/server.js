@@ -128,7 +128,6 @@ function getUserByEmail(email) {
     });
 }
 
-
 // Endpoint to check if MFA is enabled for a user
 app.get('/api/check-mfa-enabled', async (req, res) => {
     try {
@@ -150,19 +149,31 @@ app.get('/api/check-mfa-enabled', async (req, res) => {
     }
 });
 
-//check mfa status
+// Endpoint to check if MFA is enabled for a user
 app.post('/check-mfa-status', async (req, res) => {
     try {
-        // Logic to check MFA status
-        const user = await getUserFromSession(req.session.userId);
-        if (!user) throw new Error('User not found');
-        const mfaStatus = await checkMFAStatus(user);
-        res.status(200).json({ mfaStatus });
+      const { email } = req.body;
+      if (!email) throw new Error('Email is required');
+  
+      // Simulating user fetching
+      const user = await getUserByEmail(email);  // Ensure this function is working as expected
+      if (!user) throw new Error('User not found');
+  
+      // Check if MFA is enabled for the user
+      const mfaStatus = user.mfa_enabled ? {
+        enabled: true,
+        method: user.mfa_method,
+      } : {
+        enabled: false,
+        method: null,
+      };
+  
+      res.status(200).json({ mfaStatus });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error while checking MFA status' });
+      console.error(error);
+      res.status(500).json({ message: 'Error while checking MFA status' });
     }
-})
+  });
 
 // Login endpoint update to check MFA status
 app.post('/api/login', (req, res) => {
@@ -197,8 +208,6 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-
-// Route to generate TOTP secret and QR code
 // Route to generate TOTP secret and QR code
 app.post('/api/setup-totp', async (req, res) => {
     try {
@@ -303,15 +312,34 @@ const getExternalTime = async () => {
   
   
 // Route to enable MFA for the user (including TOTP or email options)
-app.post('/api/enable-mfa', (req, res) => {
-    const { email, mfaChoice } = req.body;
+app.post('/api/enable-mfa', async (req, res) => {
+    try {
+        const { email, method } = req.body;  // 'method' is the MFA method (e.g., Authy or Email)
+        if (!email || !method) {
+            return res.status(400).json({ message: 'Email and method are required' });
+        }
 
-    if (mfaChoice === 'totp') {
-        res.status(200).send({ message: 'TOTP MFA enabled successfully' });
-    } else if (mfaChoice === 'email') {
-        res.status(200).send({ message: 'Email MFA enabled successfully' });
-    } else {
-        res.status(400).send({ error: 'Invalid MFA choice' });
+        // Check if the user exists
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update the database to enable MFA and store the selected method
+        db.query(
+            'UPDATE users SET mfa_enabled = ?, mfa_method = ? WHERE email = ?',
+            [true, method, email],
+            (err) => {
+                if (err) {
+                    console.error('Error enabling MFA:', err);
+                    return res.status(500).json({ message: 'Server error enabling MFA' });
+                }
+                res.status(200).json({ message: 'MFA enabled successfully' });
+            }
+        );
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -429,6 +457,59 @@ app.post('/api/verify-mfa-email', (req, res) => {
     });
 });
 
+//-----------------------
+// Route to toggle MFA (enable/disable) for the user
+app.post('/api/disable-mfa', async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
+
+        // Check if the user exists
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update the database to disable MFA
+        db.query(
+            'UPDATE users SET mfa_enabled = ?, mfa_secret = NULL, mfa_code = NULL, mfa_expiry = NULL WHERE email = ?',
+            [false, email],
+            (err) => {
+                if (err) {
+                    console.error('Error disabling MFA:', err);
+                    return res.status(500).json({ message: 'Server error disabling MFA' });
+                }
+                res.status(200).json({ message: 'MFA disabled successfully' });
+            }
+        );
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Express.js voorbeeld
+app.put('/api/update-mfa-method', (req, res) => {
+    const { email, mfaMethod } = req.body;
+    
+    // Controleer of het e-mailadres en de MFA-methode geldig zijn
+    if (!email || !mfaMethod) {
+      return res.status(400).send('Email en MFA-methode zijn verplicht');
+    }
+  
+    // Werk de MFA-methode bij in de database
+    User.update({ email: email }, { mfa_method: mfaMethod })
+      .then(() => {
+        res.status(200).send({ message: 'MFA-methode bijgewerkt' });
+      })
+      .catch((err) => {
+        res.status(500).send({ error: 'Er is een fout opgetreden bij het bijwerken van de MFA-methode' });
+      });
+  });
+  
 // Attach db to all routes
 app.use((req, res, next) => {
     req.db = db;
@@ -815,7 +896,6 @@ app.get('/api/user-profile', verifyToken, (req, res) => {
       });
 });
 
-
 // Update user profile
 app.put('/update-profile', verifyToken, (req, res) => {
     const userId = req.userId; // Assumed you get the userId from token verification middleware
@@ -884,7 +964,6 @@ app.put('/update-profile', verifyToken, (req, res) => {
         }
     );
 });
-
 
 // Endpoint to check if email exists
 app.post('/check-email', verifyToken, (req, res) => {
@@ -1067,7 +1146,6 @@ app.put('/update-notifications', verifyToken, (req, res) => {
     );
 });
 
-
 // Deleting user account API endpoint
 app.delete('/api/delete-account', verifyToken, (req, res) => {
     const userId = req.userId;  // Extract user ID from the JWT token
@@ -1129,91 +1207,67 @@ let pendingMfaSecrets = {}; // Temporary storage for pending MFA secrets, ideall
 
 // --------------------------------------------------------------------SIMULATION SECTION
 
-//Get simulation data from database
-app.post("/api/simulatie", verifyToken, (req, res) => {
-    const { 
+// Route to save simulation data
+app.post('/api/simulation', verifyToken, (req, res) => {
+    const {
       user_id,
-      energy_usage,
-      house_size,
-      insulation_level,
+      residents,
+      panels,
+      panel_power,
+      panel_efficiency,
       battery_capacity,
-      battery_efficiency,
       charge_rate,
-      energy_cost,
-      return_rate,
-      use_dynamic_prices,
+      battery_efficiency,
+      energy_usage_method,
+      custom_kwh_usage,
+      pricing_option, // Add this field
     } = req.body;
-  
-    db.query(
-      "INSERT INTO simulatie (user_id, energy_usage, house_size, insulation_level, battery_capacity, battery_efficiency, charge_rate, energy_cost, return_rate, use_dynamic_prices) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [user_id, energy_usage, house_size, insulation_level, battery_capacity, battery_efficiency, charge_rate, energy_cost, return_rate, use_dynamic_prices],
-      (err, result) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send("Error saving simulatie.");
-        }
-        res.status(201).send("Simulatie saved successfully.");
+
+    const query = `
+      INSERT INTO simulations 
+      (user_id, residents, panels, panel_power, panel_efficiency, battery_capacity, charge_rate, battery_efficiency, energy_usage_method, custom_kwh_usage, pricing_option)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const values = [
+      user_id,
+      residents,
+      panels,
+      panel_power,
+      panel_efficiency,
+      battery_capacity,
+      charge_rate,
+      battery_efficiency,
+      energy_usage_method,
+      custom_kwh_usage,
+      pricing_option, // Include this in the values array
+    ];
+
+    db.query(query, values, (err, result) => {
+      if (err) {
+        console.error('Error saving simulation:', err);
+        return res.status(500).json({ error: 'There was an error saving your simulation data.' });
       }
-    );
-  });
-  
 
-  // Route om de simulaties van een gebruiker op te halen
-  app.get("/api/simulatie/:userId", verifyToken, (req, res) => {
-    const { userId } = req.params;
-  
-    db.query(
-      "SELECT * FROM simulatie WHERE user_id = ?",
-      [userId],
-      (err, results) => {
+      res.status(200).json({ message: 'Simulation data saved successfully!', simulationId: result.insertId });
+    });
+});
+
+// Route to fetch simulation data
+app.get("/api/simulation", verifyToken, (req, res) => {
+    const userId = req.userId;
+
+    const query = "SELECT * FROM simulations WHERE user_id = ?";
+    db.query(query, [userId], (err, result) => {
         if (err) {
-          console.error(err);
-          return res.status(500).send("Fout bij het ophalen van gegevens.");
+            console.error("Database Error:", err);
+            return res.status(500).send("Error fetching simulation data.");
         }
-        res.status(200).json(results);
-      }
-    );
-  });
-
-  //Get simulation data from database
-  app.get("/api/simulatie/:userId", verifyToken, (req, res) => {
-    const { userId } = req.params;
-  
-    db.query(
-      "SELECT * FROM simulatie WHERE user_id = ?",
-      [userId],
-      (err, results) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send("Fout bij het ophalen van gegevens.");
-        }
-        res.status(200).json(results);
-      }
-    );
-  });
-  
-
-
-// Route to fetch today's prices
-app.get('/api/today-prices', async (req, res) => {
-  try {
-    const response = await axios.get(todayURL);
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching data' });
-  }
+        res.status(200).json(result);
+    });
 });
 
 
-// Route to fetch monthly prices
-app.get('/api/monthly-prices', async (req, res) => {
-  try {
-    const response = await axios.get(monthURL);
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching data' });
-  }
-});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

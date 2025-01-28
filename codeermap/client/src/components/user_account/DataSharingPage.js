@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./style/DataSharingPage.css";
+import Swal from "sweetalert2";
 
 const DataSharingPage = () => {
     const [shareUsage, setShareUsage] = useState(false);
@@ -18,17 +19,48 @@ const DataSharingPage = () => {
         }
     };
 
-    const handleAddEmail = () => {
-        if (newEmail && !authorizedEmails.some((entry) => entry.email === newEmail)) {
-            setAuthorizedEmails([
-                ...authorizedEmails,
-                { email: newEmail, permissions, expirationDate },
-            ]);
-            setNewEmail("");
-            setPermissions("read-only");
-            setExpirationDate("");
+    const handleAddEmail = async () => {
+        if (!newEmail || authorizedEmails.some((entry) => entry.email === newEmail)) {
+          Swal.fire({
+            icon: "error",
+            title: "Invalid Email",
+            text: "Please enter a valid and unique email address.",
+          });
+          return;
         }
-    };
+      
+        // Bevestigingsmelding
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          text: `Do you want to add ${newEmail} with ${permissions} permissions?`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, add it!",
+          cancelButtonText: "Cancel",
+          reverseButtons: true,
+        });
+      
+        if (!result.isConfirmed) return;
+      
+        // Voeg e-mail toe na bevestiging
+        setAuthorizedEmails([
+          ...authorizedEmails,
+          { email: newEmail, permissions, expirationDate },
+        ]);
+      
+        // Reset velden
+        setNewEmail("");
+        setPermissions("read-only");
+        setExpirationDate("");
+      
+        Swal.fire({
+          icon: "success",
+          title: "Email Added",
+          text: `${newEmail} has been successfully added.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      };
 
     const handleSubmit = (e) => {
         e.preventDefault();

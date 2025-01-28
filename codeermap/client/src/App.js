@@ -21,15 +21,14 @@ import UserAccountLayout from './components/user_account/UserAccountLayout';
 import FeedbackForm from './components/feedback/FeedbackForm';
 import BatteryDashboard from './components/battery_dashboard/batteryDashboard';
 import SolarDashboard from './components/solar_dashboard/solarDashboard';
-import SimulatieForm from './components/simulatie_dashboard/SimulatieForm';
-import SimulatieResults from './components/simulatie_dashboard/SimulatieResults'; 
-import EnergyPrices  from './components/simulatie_dashboard/EnergyPrices';
-import SunHours from './components/simulatie_dashboard/SunHours';
-import SimulatieDashboard from './components/simulatie_dashboard/SimulatieDashboard';
+import AboutUs from './components/about_us/AboutUsPage';
+import SimulationForm from './components/simulation_dashboard/SimulationForm';
+import EnergyPrices  from './components/simulation_dashboard/EnergyPrices';
+import SunHours from './components/simulation_dashboard/SunHours';
+import SimulationDashboard from './components/simulation_dashboard/SimulationDashboard';
 import PrivateRoute from './components/PrivateRoute'; 
 import { AuthProvider } from './components/AuthContext';
-import AboutUs from './components/about_us/AboutUsPage';
-import AboutUsPage from "./components/about_us2/AboutUsPage2"
+
 import './App.css';
 
 function App() {
@@ -50,18 +49,13 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/information" element={<InformationPage />} />
             <Route path="/feedback" element={<FeedbackForm />} />
-            <Route path="/battery_dashboard" element={<BatteryDashboard />} />
-            <Route path="/solar_dashboard" element={<SolarDashboard />} />
-            <Route path="/about_us" element={<AboutUs />} />
-            <Route path="/about_us2" element={<AboutUsPage />} />
-            <Route path="/simulatie" element={<SimulatieForm userId={1} />} />
-            <Route path="/simulatie-results/:userId" element={<SimulatieResults />} />
+            <Route path="/BatteryDashboard" element={<BatteryDashboard />} />
+            <Route path="/SolarDashboard" element={<SolarDashboard />} />
+            <Route path="/simulationForm" element={<SimulationForm />} />
             <Route path="/energy-prices" element={<EnergyPrices />} />
             <Route path="/sun-hours" element={<SunHours />} />
-            <Route path="/simulatie_dashboard" element={<SimulatieDashboard />} />
-
-            
-            {/* User Account Section (Nested Routes) */}
+            <Route path="/SimulationDashboard" element={<SimulationDashboard />} />
+            <Route path="/about_us" element={<AboutUs />} />
             <Route 
               path="/user-account/*" 
               element={

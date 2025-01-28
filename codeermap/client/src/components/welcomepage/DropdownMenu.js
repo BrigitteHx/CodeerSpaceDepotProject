@@ -4,9 +4,10 @@ import { useAuth } from '../AuthContext';
 import './style/DropdownMenu.css';
 
 const DropdownMenu = () => {
-  const { logout } = useAuth(); 
+  const { logout, userData } = useAuth();  // Assuming `userId` is available in the context
   const navigate = useNavigate();  
   const [isOpen, setIsOpen] = useState(false);
+  const userId = userData?.id;
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
@@ -25,10 +26,11 @@ const DropdownMenu = () => {
         <div></div>
       </div>
       <div className={`dropdown-content ${isOpen ? 'open' : ''}`}>
-      <Link to="/home" className="menu-item" onClick={toggleMenu}>Home</Link>
+        <Link to="/home" className="menu-item" onClick={toggleMenu}>Home</Link>
         <Link to="/information" className="menu-item" onClick={toggleMenu}>Information</Link>
         <Link to="/SolarDashboard" className="menu-item" onClick={toggleMenu}>Solar Panel Dashboard</Link>
         <Link to="/BatteryDashboard" className="menu-item" onClick={toggleMenu}>Battery Dashboard</Link>
+        <Link to={`/SimulationDashboard`}className="menu-item" onClick={toggleMenu}>Simulation Dashboard</Link>
         <Link to="/user-account/personal-info" className="menu-item" onClick={toggleMenu}>User Account</Link>
         <Link to="/faq" className="menu-item" onClick={toggleMenu}>FAQ</Link>
         <Link to="/contact" className="menu-item" onClick={toggleMenu}>Contact</Link>

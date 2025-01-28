@@ -107,50 +107,85 @@ const PersonalInfoPage = () => {
     };
     
 
-  const validateForm = () => {
-    const { name, email, phoneNumber, location } = userData;
-    const newErrors = {};
-    let isValid = true;
-
-    if (!name) {
-      newErrors.name = "Name is required.";
-      isValid = false;
-    }
-    if (!email) {
-      newErrors.email = "Email is required.";
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Please enter a valid email address.";
-      isValid = false;
-    }
-    if (!phoneNumber) {
-      newErrors.phoneNumber = "Phone number is required.";
-      isValid = false;
-    } else if (!/^\d{10,}$/.test(phoneNumber)) {
-      newErrors.phoneNumber = "Please enter a valid phone number (at least 10 digits).";
-      isValid = false;
-    }
-    if (!location) {
-      newErrors.location = "Location is required.";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
+    const validateForm = () => {
+      const { name, email, phoneNumber, location, bio } = userData;
+      const newErrors = {};
+      let isValid = true;
+    
+      // Name validation
+      if (!name) {
+        newErrors.name = "Name is required.";
+        isValid = false;
+      } else if (name.length > 20) { // Ensure name is less than 50 characters
+        newErrors.name = "Name must be 20characters or less.";
+        isValid = false;
+      } else if (/[^a-zA-Z\s]/.test(name)) { // Ensure only letters and spaces
+        newErrors.name = "Name should only contain letters and spaces.";
+        isValid = false;
+      }
+    
+      // Email validation
+      if (!email) {
+        newErrors.email = "Email is required.";
+        isValid = false;
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        newErrors.email = "Please enter a valid email address.";
+        isValid = false;
+      } else if (email.length > 100) {
+        newErrors.email = "Email must be 100 characters or less.";
+        isValid = false;
+      }
+    
+      // Phone number validation
+      if (!phoneNumber) {
+        newErrors.phoneNumber = "Phone number is required.";
+        isValid = false;
+      } else if (!/^\d{10,15}$/.test(phoneNumber)) {
+        newErrors.phoneNumber = "Phone number must be between 10 and 15 digits.";
+        isValid = false;
+      }
+    
+      // Location validation
+      if (!location) {
+        newErrors.location = "Location is required.";
+        isValid = false;
+      }
+    
+      // Bio validation
+      if (bio && bio.length > 300) {
+        newErrors.bio = "Bio must be 300 characters or less.";
+        isValid = false;
+      }
+    
+      setErrors(newErrors);
+      return isValid;
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Validate form
+    // Validatie van het formulier
     if (!validateForm()) return;
+  
+    // Bevestigingsmelding
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Are you sure you want to update your information?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+    });
+  
+    if (!result.isConfirmed) return;
   
     setLoading(true);
   
     try {
       const authToken = localStorage.getItem("authToken");
   
-      // Check if the email already exists in the database
+      // Controleer of de e-mail al bestaat
       const emailExistsResponse = await axios.post(
         "http://localhost:5000/check-email",
         { email: userData.email },
@@ -162,7 +197,6 @@ const PersonalInfoPage = () => {
         }
       );
   
-      // Ensure that the backend responds with a proper 'exists' field
       if (emailExistsResponse.data.exists) {
         Swal.fire({
           icon: "error",
@@ -172,7 +206,7 @@ const PersonalInfoPage = () => {
         return;
       }
   
-      // Proceed with updating the profile if email is unique
+      // Profiel bijwerken
       const response = await axios.put(
         "http://localhost:5000/update-profile",
         userData,
@@ -184,7 +218,6 @@ const PersonalInfoPage = () => {
         }
       );
   
-      // Show success message after profile update
       Swal.fire({
         icon: "success",
         title: "Profile updated successfully!",
@@ -195,36 +228,16 @@ const PersonalInfoPage = () => {
     } catch (error) {
       console.error("Error during update:", error);
   
-      // Handle specific errors based on status or message from backend
-      if (error.response?.status === 401) {
-        Swal.fire({
-          icon: "error",
-          title: "Session Expired",
-          text: "Your session has expired. Please log in again.",
-          confirmButtonText: "Log In",
-        }).then(() => {
-          localStorage.removeItem("authToken"); // Clear token
-          window.location.href = "/login"; // Redirect to login page
-        });
-      } else if (error.response?.status === 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Bad Request",
-          text: "There was an issue with your request. Please check your data and try again.",
-        });
-      } else {
-        const status = error.response?.status || "Unknown";
-        const message = error.response?.data?.message || "An unexpected error occurred.";
-        Swal.fire({
-          icon: "error",
-          title: `Error ${status}`,
-          text: message,
-        });
-      }
+      Swal.fire({
+        icon: "error",
+        title: "Update Failed",
+        text: error.response?.data?.message || "An unexpected error occurred.",
+      });
     } finally {
       setLoading(false);
     }
   };
+  
   
 
   const handleDeleteAccount = () => {
@@ -330,22 +343,26 @@ const PersonalInfoPage = () => {
               <input
                 type="text"
                 name="name"
+                maxLength="50"
                 value={userData?.name || ""}
                 onChange={handleInputChange}
                 placeholder="Enter your name"
               />
               {errors.name && <div className="error-message">{errors.name}</div>}
+
             </div>
             <div className="form-group">
               <label>Email</label>
               <input
                 type="email"
                 name="email"
+                maxLength="100"
                 value={userData?.email || ""}
                 onChange={handleInputChange}
                 placeholder="Enter your email"
               />
               {errors.email && <div className="error-message">{errors.email}</div>}
+
             </div>
           </div>
 
@@ -355,6 +372,7 @@ const PersonalInfoPage = () => {
               <input
                 type="text"
                 name="phoneNumber"
+                maxLength="15"
                 value={userData?.phoneNumber || ""}
                 onChange={handleInputChange}
                 placeholder="Enter your phone number"
@@ -363,6 +381,7 @@ const PersonalInfoPage = () => {
                 <div className="error-message">{errors.phoneNumber}</div>
               )}
             </div>
+
               <div className="form-group">
                 <label>Date of Birth</label>
                 <input
@@ -418,11 +437,17 @@ const PersonalInfoPage = () => {
             <label>Bio</label>
             <textarea
               name="bio"
+              maxLength="100"
               value={userData?.bio || ""}
               onChange={handleInputChange}
               placeholder="Tell us a bit about yourself"
             />
+            <div className="character-counter">
+              {userData?.bio?.length || 0}/100 characters
+            </div>
+            {errors.bio && <div className="error-message">{errors.bio}</div>}
           </div>
+
 
           <button type="submit" className="btn-save" disabled={loading}>
             {loading ? "Saving..." : "Save Changes"}

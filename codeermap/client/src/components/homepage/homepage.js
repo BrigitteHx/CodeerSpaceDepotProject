@@ -149,22 +149,6 @@ const Homepage = () => {
 
   return (
     <div className="homepage">
-      {/* <button onClick={handleLogout}>Logout</button>
-      <div>
-        <h1>Welcome to the Homepage</h1>
-        {error && <p>{error}</p>}
-        {userData ? (
-          <div>
-            <p>User ID: {userData.id}</p>
-            <p>Name: {userData.name}</p>
-            <p>Email: {userData.email}</p>
-            <p>Phone Number: {userData.phoneNumber}</p>
-            <p>Location: {userData.location}</p>
-          </div>
-        ) : (
-          <p>Loading user data...</p>
-        )}
-      </div> */}
       
       <div className="box-1 bg-primary text-white text-center p-5">
         <h1>Welcome, {userData ? userData.name : "User"}!</h1>

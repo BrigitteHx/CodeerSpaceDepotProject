@@ -8,13 +8,15 @@ import './style/Header.css';
 
 const Header = () => {
   const { loggedIn, userData, error } = useAuth();
+  const userId = userData?.id;
+
 
   const profilePic = userData?.profilePicture
     ? `http://localhost:5000${userData.profilePicture}` // If the user has a profile picture, use it
     : defaultProfilePic; // Otherwise, use the default profile ima
   return (
     <div className='navbar'>
-      <a href='/'>
+      <a href='/home'>
         <img className='logo' src={logo} alt='logo'></img>
       </a>
       
@@ -25,8 +27,9 @@ const Header = () => {
               <ul>
                 <a href='/home'><li>Home</li></a>
                 <a href='/information'><li>Information</li></a>
-                <a href='/solar_dashboard'><li>Solar Panels Dashboard</li></a>
-                <a href='/battery_dashboard'><li>Battery Dashboard</li></a>
+                <a href='/SolarDashboard'><li>Solar Panels Dashboard</li></a>
+                <a href='/BatteryDashboard'><li>Battery Dashboard</li></a>
+                <a href='/SimulationDashboard/'><li>Simulation Dashboard</li></a>
               </ul>
               <img src={profilePic} alt='profile' className='profile' />
               <span>{userData?.name}</span>

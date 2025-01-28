@@ -110,7 +110,7 @@ const LoginForm = () => {
                   setShowMFA(true);
                 }
                 else if (result.isDenied){
-                  setShowMFAEmail(true);
+                  setShowMFAVerificationPage(true);
                 }  // Show MFA setup form
                 else{
                   navigate("/home");  // Redirect to home page
