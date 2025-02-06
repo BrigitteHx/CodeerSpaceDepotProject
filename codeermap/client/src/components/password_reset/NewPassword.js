@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './style/password_reset.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function ResetPassword() {
-    const { token } = useParams(); // Get the token from the URL parameters
-    const navigate = useNavigate(); // Hook to navigate to another page
-    const [newPassword, setNewPassword] = useState(''); // State for the new password
-    const [confirmPassword, setConfirmPassword] = useState(''); // State for confirming the new password
-    const [errorMessage, setErrorMessage] = useState(''); // State for error messages
-    const [successMessage, setSuccessMessage] = useState(''); // State for success messages
-    const [passwordStrength, setPasswordStrength] = useState(''); // State for password strength feedback
+    const { token } = useParams();
+    const navigate = useNavigate();
+    const [newPassword, setNewPassword] = useState(''); 
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); 
+    const [passwordStrength, setPasswordStrength] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // Password visibility state
 
     const validatePasswordStrength = (password) => {
         const minLength = 8;
@@ -34,11 +36,11 @@ function ResetPassword() {
     const handlePasswordChange = (e) => {
         const password = e.target.value;
         setNewPassword(password);
-        validatePasswordStrength(password); // Validate the password strength in real-time
+        validatePasswordStrength(password);
     };
 
     const handleResetPassword = async (e) => {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
         
         // Validate password strength
         const isValidPassword = validatePasswordStrength(newPassword);
@@ -55,19 +57,19 @@ function ResetPassword() {
 
         // Make API call to reset the password
         try {
-            const response = await fetch('http://localhost:5000/api/reset-password', {
+            const response = await fetch('http://localhost:5000/api/user/reset-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token, newPassword }), // Send the token and new password
+                body: JSON.stringify({ token, newPassword }),
             });
 
             const data = await response.json();
             if (response.ok) {
                 setSuccessMessage(data.message);
                 setTimeout(() => {
-                    navigate('/login'); // Redirect to login page after 2 seconds
+                    navigate('/login');
                 }, 2000);
             } else {
                 setErrorMessage(data.message);
@@ -92,24 +94,37 @@ function ResetPassword() {
                     <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
                         Password Strength: {passwordStrength}
                     </p>
-                    <input 
-                        type="password" 
-                        className="password-reset-input"
-                        placeholder="New Password" 
-                        value={newPassword} 
-                        onChange={handlePasswordChange} 
-                        required 
-                    />
+                    
+                    {/* New Password input */}
+                    <div className="password-input-container">
+                        <input 
+                            type={showPassword ? "text" : "password"}
+                            className="password-reset-input"
+                            placeholder="New Password" 
+                            value={newPassword} 
+                            onChange={handlePasswordChange} 
+                            required 
+                        />
+                        <div className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </div>
+                    </div>
 
                     {/* Confirm Password input */}
-                    <input 
-                        type="password" 
-                        className="password-reset-input"
-                        placeholder="Confirm Password" 
-                        value={confirmPassword} 
-                        onChange={(e) => setConfirmPassword(e.target.value)} 
-                        required 
-                    />
+                    <div className="password-input-container">
+                        <input 
+                            type={showPassword ? "text" : "password"} // You may want to handle confirm password visibility separately if desired
+                            className="password-reset-input"
+                            placeholder="Confirm Password" 
+                            value={confirmPassword} 
+                            onChange={(e) => setConfirmPassword(e.target.value)} 
+                            required 
+                        />
+                        <div className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </div>
+                    </div>
+
                     <button type="submit" className="password-reset-button">Reset Password</button>
                 </form>
             </div>

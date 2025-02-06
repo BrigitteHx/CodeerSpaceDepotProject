@@ -60,8 +60,8 @@ const PersonalInfoPage = () => {
           setLoading(true);
     
           axios
-            .put("http://localhost:5000/upload-profile-picture", formData, {
-              headers: {
+          .put("http://localhost:5000/api/user/uploadProfilePicture", formData, {
+            headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
                 "Content-Type": "multipart/form-data",
               },
@@ -187,7 +187,7 @@ const PersonalInfoPage = () => {
   
       // Controleer of de e-mail al bestaat
       const emailExistsResponse = await axios.post(
-        "http://localhost:5000/check-email",
+        "http://localhost:5000/api/user/check-email",
         { email: userData.email },
         {
           headers: {
@@ -208,7 +208,7 @@ const PersonalInfoPage = () => {
   
       // Profiel bijwerken
       const response = await axios.put(
-        "http://localhost:5000/update-profile",
+        "http://localhost:5000/api/user/updateUserProfile",
         userData,
         {
           headers: {
@@ -262,7 +262,7 @@ const PersonalInfoPage = () => {
             return;
           }
 
-          const response = await axios.delete("http://localhost:5000/api/delete-account", {
+          const response = await axios.delete("http://localhost:5000/api/user/deleteAccount", {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },

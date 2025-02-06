@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'; 
-import { Drawer, Box, IconButton, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Drawer, Box, IconButton, Typography, List, ListItem, ListItemText, Divider, Tooltip } from '@mui/material';
 import AddBattery from './AddBattery'; // Import the AddBattery component
 import axios from 'axios';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Sidebar = () => {
   const [batteries, setBatteries] = useState([]);
@@ -21,7 +22,7 @@ const Sidebar = () => {
     const fetchBatteries = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:5000/api/readBatteries', {
+        const response = await axios.get('http://localhost:5000/api/battery/readBatteries', {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token here
           },
@@ -78,8 +79,13 @@ const Sidebar = () => {
         }}
       >
         <Box sx={{ padding: '20px' }}>
-          <Typography variant="h6" sx={{ marginBottom: '20px', color: '#1976d2', fontWeight: 'bold' }}>
-            Batterijen
+          <Typography variant="h6" sx={{ marginBottom: '20px', color: '#1976d2', fontWeight: 'bold',}}>
+          Batteries
+            <Tooltip title="This window displays the list of batteries you have added.  You can also add new batteries here.">
+              <IconButton size="small" sx={{ marginLeft: '5px', color: '#1976d2' }}>
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
           </Typography>
           <Divider sx={{ marginBottom: '20px' }} />
           {loading ? (
@@ -114,3 +120,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

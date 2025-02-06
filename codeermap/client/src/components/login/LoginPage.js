@@ -63,9 +63,10 @@ const LoginForm = () => {
       setLoading(true);
       const recaptchaToken = await executeRecaptcha('login');
       const data = { ...formData, token: recaptchaToken };
-      const response = await axios.post('http://localhost:5000/api/login', data);
+      const response = await axios.post('http://localhost:5000/api/auth/login', data);
       const {token} = response.data
       if (response.data.requireMFA) {
+        console.log("require",response.data.requireMFA);
         setMfaToken(response.data.tempToken); // Store temporary token for MFA
         setUserEmail(formData.email); // Store email for MFA process
         await login(token);
@@ -110,7 +111,7 @@ const LoginForm = () => {
                   setShowMFA(true);
                 }
                 else if (result.isDenied){
-                  setShowMFAVerificationPage(true);
+                  setShowMFAEmail(true);
                 }  // Show MFA setup form
                 else{
                   navigate("/home");  // Redirect to home page
@@ -227,6 +228,14 @@ const LoginForm = () => {
           <MFA email={formData.email} onMFAVerified={handleMFASubmit} />
         )
       )}
+
+      <div className="login-right-panel">
+        <h1>Welcome Back!</h1>
+        <p>
+          Access your account to manage your dashboard, track your energy usage, and optimize efficiency effortlessly.
+        </p>
+      </div>
+      
     </div>
   );
 };

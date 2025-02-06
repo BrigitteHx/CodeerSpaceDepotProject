@@ -26,6 +26,12 @@ ul li {
   cursor: pointer;
 }
 
+.navbar ul li a {
+  text-decoration: none;
+  color: black;
+  transition: all .3s ease-in-out;
+}
+
 .profile {
   height: 50px;
   cursor: pointer;
@@ -67,17 +73,17 @@ ul li {
 }
 
 .dropdown-content {
-  display: none; /* Hidden by default */
+  display: none; 
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  left: -130px; /* Adjust this value to move the dropdown left */
+  left: -130px;
 }
 
 .dropdown-menu:hover .dropdown-content {
-  display: flex; /* Show on hover */
+  display: flex;
   flex-direction: column;
 }
 
@@ -93,3 +99,21 @@ ul li {
 }
 
 
+.active {
+  font-weight: bold;
+  color: #1b3b73; 
+  border-bottom: 2px solid #1b3b73; 
+}
+
+.active a {
+  color: #1b3b73!important; 
+}
+
+
+.navbar ul li a {
+  border-bottom: 2px solid transparent; 
+}
+
+.navbar ul li a:hover {
+  border-bottom: 2px solid #1b3b73; 
+}

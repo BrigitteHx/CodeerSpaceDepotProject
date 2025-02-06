@@ -14,16 +14,16 @@ import {
 // Register the required Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function Card({ title, value, chartData }) {
+function Card({ title, value, chartData, chartColor }) {
   return (
     <div className="card">
-      <div className='card-information'>
+      <div className="card-information">
         <h3>{title}</h3>
         <h2>{value}</h2>
         <h4><RealTimeClock /></h4>
       </div>
 
-      <div className='card-graph'>
+      <div className="card-graph">
         {chartData && (
           <div className="chart-container" style={{ width: '100%', height: '150px' }}>
             <Bar
@@ -33,8 +33,8 @@ function Card({ title, value, chartData }) {
                   {
                     label: chartData.label,
                     data: chartData.data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: chartColor || 'rgba(75, 192, 192, 0.6)', // Default color
+                    borderColor: chartColor ? chartColor.replace('0.6', '1') : 'rgba(75, 192, 192, 1)', // Adjust opacity for the border
                     borderWidth: 1,
                   },
                 ],
@@ -49,10 +49,10 @@ function Card({ title, value, chartData }) {
                 },
                 scales: {
                   x: {
-                    display: false, // Hides the x-axis
+                    display: false, 
                   },
                   y: {
-                    display: false, // Hides the y-axis
+                    display: false, 
                   },
                 },
               }}
@@ -63,5 +63,7 @@ function Card({ title, value, chartData }) {
     </div>
   );
 }
+
+
 
 export default Card;

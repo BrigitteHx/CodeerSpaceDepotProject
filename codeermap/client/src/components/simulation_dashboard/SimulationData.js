@@ -34,7 +34,7 @@ export const SimulationData = (userId) => {
   useEffect(() => {
     const fetchSimulationData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/simulation", {
+        const response = await axios.get("http://localhost:5000/api/simulation/user", {
           headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
         });
         setResults(response.data?.[0] || null);

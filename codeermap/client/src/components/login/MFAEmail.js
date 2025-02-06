@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -6,24 +6,60 @@ import { useAuth } from "../AuthContext";
 import "./style/LoginPage.css";
 
 const MFAEmail = ({ email, onMFAVerified }) => {
+  const [code, setCode] = useState('');
   const [mfaMethod, setMfaMethod] = useState(null);
   const [error, setError] = useState("");
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/check-mfa-enabled", { params: { email } })
-      .then((response) => {
-      })
-      .catch(() => setError("Error while checking MFA status"));
-
-    axios
-      .post("http://localhost:5000/api/setup-mfa", { email })
-      .then((response) => {
-        setMfaMethod("email");
-      })
-      .catch(() => setError("Error while fetching MFA setup"));
+    if (!email) return;
+  
+    let isSubscribed = true; // Prevent state updates after unmount
+    let hasExecuted = false; // Ensure the effect only runs the API call once
+  
+    if (!hasExecuted) {
+      hasExecuted = true; // Mark as executed
+  
+      axios
+        .post("http://localhost:5000/api/auth/setup-mfa-by-email", { email })
+        .then(() => {
+          if (isSubscribed) setMfaMethod("email");
+        })
+        .catch(() => {
+          if (isSubscribed) setError("Error initiating MFA setup. Please try again.");
+        });
+    }
+  
+    return () => {
+      isSubscribed = false; // Cleanup on unmount
+    };
   }, [email]);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/auth/verify-mfa-email", {
+        email,
+        code,
+      });
+
+      if (response.status === 200) {
+        Swal.fire({
+          title: "MFA Verified",
+          text: "Your Multi-Factor Authentication was successful.",
+          icon: "success",
+          confirmButtonText: "Proceed",
+        }).then(() => onMFAVerified());
+      }
+    } catch {
+      Swal.fire({
+        title: "Error",
+        text: "Invalid MFA code. Please try again.",
+        icon: "error",
+        confirmButtonText: "Retry",
+      });
+    }
+  };
 
   return (
     <div className="login-container">
@@ -40,12 +76,12 @@ const MFAEmail = ({ email, onMFAVerified }) => {
               <div>
               <input
                 type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="Enter MFA Code"
                 className="login-input"
-                placeholder="Enter TOTP"
               />
-              <button
-                className="login"
-              >
+              <button type="submit" className="login" onClick={handleSubmit}>
                 Verify
               </button>
               </div>

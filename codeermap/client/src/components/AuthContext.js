@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [mfaVerified, setMfaVerified] = useState(false); // Nieuwe state voor MFA-verificatie
+  const [isMfaVerified, setIsMfaVerified] = useState(false);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -13,16 +13,17 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = () => {
     return localStorage.getItem('authToken') || sessionStorage.getItem('authToken') ? true : false;
   };
-  
+  const setMfaVerified = (status) => {
+    setIsMfaVerified(status);
+};
   // Function to fetch user data and MFA status
   const fetchUserData = async () => {
     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     try {
-      const response = await axios.get('http://localhost:5000/api/user-info', {
-        headers: { Authorization: token },
+      const response = await axios.get('http://localhost:5000/api/user/user-info', {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setUserData(response.data.user);
-      setMfaVerified(response.data.user.mfa_verified); // Haal de MFA-verificatiestatus op
+      setUserData(response.data);
     } catch (error) {
       setError('Error fetching user data.');
       console.error('Error fetching user data:', error);
@@ -31,16 +32,16 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle login
   const login = async (token) => {
-    localStorage.setItem('authToken', token);
-    setLoggedIn(true); // Set loggedIn to true after login
+    localStorage.setItem('authToken', token); // Store token in localStorage
+    setLoggedIn(true); // Set loggedIn state to true
     await fetchUserData(); // Fetch user data after login
   };
 
   // Function to handle logout
   const logout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('authToken'); // Remove token from localStorage
     sessionStorage.removeItem('authToken');
-    setLoggedIn(false); // Update loggedIn to false after logout
+    setLoggedIn(false); // Set loggedIn state to false
     setMfaVerified(false); // Reset MFA status
     setUserData(null); // Reset user data
   };
@@ -54,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, mfaVerified, setMfaVerified, userData, error, setUserData, login, logout }}>
+    <AuthContext.Provider value={{ loggedIn, userData, error, setUserData, login, logout, isMfaVerified, setMfaVerified }}>
       {children}
     </AuthContext.Provider>
   );

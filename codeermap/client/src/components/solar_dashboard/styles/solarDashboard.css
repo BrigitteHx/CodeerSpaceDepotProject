@@ -32,10 +32,10 @@
 .second-row {
     display: flex;
     justify-content: space-around;
-    gap: 35px;
+    gap: 15px;
 }
 
-.card, canvas, .performance-monitoring {
+.card-container .card, .energy-chart-container canvas, .performance-monitoring {
     background-color: white;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     width: 50%;
@@ -47,12 +47,14 @@
 
 .card {
     display: flex;
+    justify-content: space-between;
 }
 
 .card .card-information {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: space-evenly;
 }
 
 .card h4 {
@@ -63,7 +65,7 @@
     margin-top: 5px;
 }
 
-.card:hover, canvas:hover, .performance-monitoring:hover {
+.card-container .card:hover, .energy-chart-container canvas:hover, .performance-monitoring:hover {
     transform: scale(1.05);
     border-color: #1b3b73;
 }
@@ -72,6 +74,15 @@
     width: 49%;
     display: flex;
     align-items: center;
+}
+
+.card-graph .chart-container {
+    background-color: transparent!important;
+    box-shadow: none!important;
+    margin: 0!important;
+    padding: 0!important;
+    animation: none!important;
+    border-radius: 0!important;
 }
 
 .performance-monitoring {
@@ -94,4 +105,65 @@
     background-color: transparent;
     box-shadow: none;
     border: none;
+}
+
+.energy-chart-container canvas {
+    width: 100%!important;
+    height: 100%!important;
+}
+
+.panel-status-section {
+    margin-top: 2rem;
+    border-radius: 12px;
+}
+
+.panel-status-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.panel-status {
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px;
+    transition: 0.3s;
+}
+
+.panel-status:hover {
+    transform: scale(1.05);
+}
+
+.panel-status p {
+    font-size: 1rem;
+    margin: 0.2rem 0;
+}
+
+.panel-status-section h2 {
+    margin-bottom: 1rem;
+    transition: 0.3s ease;
+}
+
+.panel-status-section h2:hover {
+    color: #1058b6;
+}
+
+.canvas {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px;
+    transition: 0.3s;
+    border-radius: 8px;
+    border: 2px solid transparent;
+}
+
+.canvas:hover {
+    transform: scale(1.05);
+    border-color: #1b3b73;
+}
+
+.energy-production canvas {
+    display: inline !important;
+    background-color: white;
 }

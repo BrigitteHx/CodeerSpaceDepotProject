@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./style/SettingsPage.css";
-import { useAuth } from "../AuthContext"; // Context for user data and authentication token
+import { useAuth } from "../AuthContext";
 import Swal from "sweetalert2";
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
-import MFASettings from "./MFASettings";  // Import for MFA settings page
-import EmailMFA from "./EmailMFA";  // Import for Email MFA
-import MfaVerificationPage from "../login/MfaVerificationPage"; // Import for MFA Verification
+import MFASettings from "./MFASettings";  
+import EmailMFA from "./EmailMFA";
+import MfaVerificationPage from "../login/MfaVerificationPage";
 
 const SettingsPage = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ const SettingsPage = () => {
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [language, setLanguage] = useState("English");
-  const [mfaEnabled, setMfaEnabled] = useState(false);  // Keep local state for MFA
+  const [mfaEnabled, setMfaEnabled] = useState(false);
   const [mfaMethod, setMfaMethod] = useState("");
   const [showMFASettings, setShowMFASettings] = useState(false);
   const [showMFAVerificationPage, setShowMFAVerificationPage] = useState(false);
@@ -52,6 +52,7 @@ const SettingsPage = () => {
     if (saveMFA !== null) {
       setNotifications(JSON.parse(saveMFA));
     }
+    
     fetchMFAStatus();
 
   }, [token, setUserData]);
@@ -67,16 +68,18 @@ const SettingsPage = () => {
   const fetchMFAStatus = () => {
     if (token && userData?.email) {
       axios
-        .get("http://localhost:5000/api/check-mfa-enabled", {
+        .get("http://localhost:5000/api/auth/checkMFAStatus", {
           params: { email: userData.email },
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           console.log('MFA Status Response:', response.data);
-  
-          // Ensure the response data has the correct structure
-          setMfaEnabled(response.data.mfaStatus.enabled);
-          setMfaMethod(response.data.mfaStatus.method);
+          if (response.data && response.data.mfaStatus) {
+            setMfaEnabled(response.data.mfaStatus.enabled);
+            setMfaMethod(response.data.mfaStatus.method || "");
+          } else {
+            console.error("Unexpected response structure:", response.data);
+          }
         })
         .catch(() =>
           Swal.fire("Error", "Failed to retrieve MFA status.", "error")
@@ -137,7 +140,7 @@ const handleSwitchMfaMethod = () => {
       setNotifications(newStatus);
       localStorage.setItem("notifications", JSON.stringify(newStatus));
 
-      const response = await axios.put('http://localhost:5000/update-notifications', {
+      const response = await axios.put('http://localhost:5000/api/user/updateNotifications', {
         notifications: newStatus
       }, {
         headers: {
@@ -207,7 +210,7 @@ const handleSwitchMfaMethod = () => {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/password-reset', { email });
+      await axios.post('http://localhost:5000/api/user/request-password-reset', { email });
 
       Swal.fire({
         icon: 'success',
@@ -235,10 +238,9 @@ const handleSwitchMfaMethod = () => {
     if (mfaEnabled) {
       // Disable MFA by calling the backend API
       try {
-        const response = await axios.post("http://localhost:5000/api/disable-mfa", { email: userData.email }, {
+        const response = await axios.post("http://localhost:5000/api/auth/disable-MFA", { email: userData.email }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
         if (response.status === 200) {
           setMfaEnabled(false);
           setMfaMethod("");
@@ -257,7 +259,7 @@ const handleSwitchMfaMethod = () => {
     if (userData?.mfa_enabled) {
       setShowMFAVerificationPage(false);
       axios
-        .post("http://localhost:5000/api/disable-mfa", { email: userData.email }, {
+        .post("http://localhost:5000/api/auth/disable-MFA", { email: userData.email }, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
@@ -267,22 +269,6 @@ const handleSwitchMfaMethod = () => {
         })
         .catch(() => Swal.fire("Error", "Failed to disable MFA.", "error"));
     }
-  };
-
-  // Save MFA settings to the backend after the user selects a method
-  const handleSaveMFASettings = (method) => {
-    axios
-      .post("http://localhost:5000/api/enable-mfa", { email: userData.email, method }, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setMfaEnabled(true);
-        setMfaMethod(method);
-        Swal.fire("Success", `MFA with ${method} has been enabled.`, "success");
-      })
-      .catch((error) => {
-        Swal.fire("Error", "Failed to enable MFA. Please try again.", "error");
-      });
   };
 
   return (
@@ -331,23 +317,22 @@ const handleSwitchMfaMethod = () => {
         <button onClick={handleToggleMFA} className="btn-save">
           {mfaEnabled ? "Disable MFA" : "Enable MFA"}
         </button>
-
-        {/* If MFA is enabled, show mfa method */}
-        {mfaEnabled && (
+        
+        {mfaEnabled ? (
           <div>
-            <p>Method: {mfaMethod}</p>
+            <p>Method: {userData?.mfa_method}</p>
             <button onClick={handleSwitchMfaMethod} className="btn-switch-mfa">
               Switch MFA Method
             </button>
           </div>
+        ) : (
+          <p>MFA is currently disabled</p>
         )}
 
-        {/* Conditional rendering for MFA settings */}
         {showMFASettings && <MFASettings email={userData.email} />}
         {showMFAEmail && <EmailMFA email={userData.email} />}
         {showMFAVerificationPage && <MfaVerificationPage email={userData.email} onMFAConfirmed={handleMFAConfirmed} />}
       </div>
-
       {/* Change Password Section */}
       <div className="settings-box">
         <h2>Change Password</h2>

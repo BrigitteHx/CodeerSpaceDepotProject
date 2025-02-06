@@ -49,12 +49,12 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/information" element={<InformationPage />} />
             <Route path="/feedback" element={<FeedbackForm />} />
-            <Route path="/BatteryDashboard" element={<BatteryDashboard />} />
-            <Route path="/SolarDashboard" element={<SolarDashboard />} />
+            <Route path="/battery_dashboard" element={<BatteryDashboard />} />
+            <Route path="/solar_dashboard" element={<SolarDashboard />} />
+            <Route path="/simulation_dashboard" element={<SimulationDashboard />} />
             <Route path="/simulationForm" element={<SimulationForm />} />
             <Route path="/energy-prices" element={<EnergyPrices />} />
             <Route path="/sun-hours" element={<SunHours />} />
-            <Route path="/SimulationDashboard" element={<SimulationDashboard />} />
             <Route path="/about_us" element={<AboutUs />} />
             <Route 
               path="/user-account/*" 

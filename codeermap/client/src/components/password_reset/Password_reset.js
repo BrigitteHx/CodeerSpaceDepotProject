@@ -30,7 +30,7 @@ const PasswordReset = () => {
 
     try {
       // Request to the server to check if the email is registered
-      const response = await axios.post('http://localhost:5000/api/password-reset', { email });
+      const response = await axios.post('http://localhost:5000/api/user/request-password-reset', { email });
       setMessage("Password reset instructions have been sent to your email.");
       setIsSubmitted(true);
     } catch (error) {

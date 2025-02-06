@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import "./style/SimulationDashboard.css";
 import ResultsSummary from './ResultsSummary';
 import Advice from './Advice';
-import RadarChart from './RadarChart';
+import RadarChart from './BarChart';
 import LineChart from './LineChart';
 import CircularProgress from './CircularProgress';
 import { calculateResults } from './simulationUtils';
@@ -52,14 +52,7 @@ const SimulationDashboard = () => {
       labels: dateLabels,
       datasets: [{
         label: "Solar Output (kWh)",
-        data: displayResults.daily.solarOutput.map((output, index) => {
-          const sunshineDuration = sunshineData[index];
-          const activeSunHours = sunshineDuration / 3600;
-          const solarOutputDuringDay = output * activeSunHours;
-          const isPeakHour = index >= 10 && index <= 14;
-          const peakMultiplier = isPeakHour ? 1.5 : 1;
-          return solarOutputDuringDay * peakMultiplier;
-        }),
+        data: displayResults.daily.solarOutput.map(output => output),
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         borderColor: "rgb(75, 192, 192)",
         borderWidth: 2,
@@ -104,7 +97,7 @@ const SimulationDashboard = () => {
       </div>
       <div className="results-container">
         <div className="chart-container">
-          <RadarChart data={chartData.radarData} />
+          <RadarChart data={displayResults.fifteenDay} />
         </div>
         <div className="chart-container">
           <CircularProgress panelOutput={displayResults.daily.panelOutput} energyUsage={displayResults.daily.energyUsage} />

@@ -100,32 +100,10 @@ CREATE TABLE simulations (
     pricing_option VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-); 
-
--- ===================================================================
--- 6. Simulatie Tabel (Alternatieve versie)
--- ===================================================================
-
--- Alternatieve versie van de simulatie tabel
-CREATE TABLE simulatie (
-    id INT AUTO_INCREMENT PRIMARY KEY,          -- Unique identifier for each simulation
-    user_id INT NULL,                           -- Optional: ID of the user (foreign key if users table exists)
-    energy_usage FLOAT NOT NULL,                -- Energy usage per day in kWh
-    house_size VARCHAR(50) NOT NULL,            -- Size of the house (e.g., "<50m²", "50-100m²")
-    insulation_level VARCHAR(20) NOT NULL,      -- Insulation level (e.g., "Good", "Average", "Poor")
-    battery_capacity FLOAT NOT NULL,            -- Battery capacity in kWh
-    battery_efficiency FLOAT DEFAULT 90,        -- Battery efficiency in percentage (default: 90%)
-    charge_rate FLOAT NOT NULL,                 -- Charging rate in kW
-    energy_cost FLOAT NOT NULL,                 -- Cost of energy per kWh (€)
-    return_rate FLOAT NOT NULL,                 -- Return rate per kWh (€)
-    use_dynamic_prices BOOLEAN DEFAULT FALSE,   -- Whether dynamic energy pricing is enabled
-    simulation_result JSON NULL,                -- Results of the simulation (stored as JSON for flexibility)
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of when the simulation was created
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last updated timestamp
 );
 
 -- ===================================================================
--- 7. Verwijzing van simulatie naar gebruikers
+-- 6. Verwijzing van simulatie naar gebruikers
 -- ===================================================================
 
 -- Voeg de foreign key relatie toe voor simulatie
@@ -135,7 +113,7 @@ FOREIGN KEY (user_id) REFERENCES users(id)
 ON DELETE CASCADE;
 
 -- ===================================================================
--- 8. Indexen voor prestatieverbetering
+-- 7. Indexen voor prestatieverbetering
 -- ===================================================================
 
 -- Maak indexen voor simulaties om prestaties te verbeteren

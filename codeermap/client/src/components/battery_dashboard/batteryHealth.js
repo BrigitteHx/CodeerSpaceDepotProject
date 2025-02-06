@@ -2,13 +2,15 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Paper, Box } from '@mui/material';
 
-function BatteryHealth() {
+function BatteryHealth({efficiency}) {
+  const lostCapacity = 100-efficiency;
+  const remainingCapacity = efficiency;
   const data = {
-    labels: ['Used Capacity', 'Remaining Capacity'],
+    labels: ['Lost Capacity', 'Remaining Capacity'],
     datasets: [
       {
-        data: [20, 80],
-        backgroundColor: ['red', 'green'],
+        data: [lostCapacity, remainingCapacity],
+        backgroundColor: ['red', '#10ab02'],
       },
     ],
   };

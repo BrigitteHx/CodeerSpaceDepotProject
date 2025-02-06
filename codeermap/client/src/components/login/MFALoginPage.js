@@ -17,9 +17,19 @@ const MFALoginPage = ({ email, onMFAVerified }) => {
     e.preventDefault();
     setLoading(true);
     
+    const token = localStorage.getItem('authToken'); // Retrieve token from localStorage (or wherever it's stored)
+  
     try {
-      const response = await axios.post('http://localhost:5000/api/verify-mfa', { email, otp });
-
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/verify-mfa', 
+        { email, otp },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
+          },
+        }
+      );
+      
       if (response.data.success) {
         Swal.fire({
           title: "MFA Verified",
@@ -37,6 +47,7 @@ const MFALoginPage = ({ email, onMFAVerified }) => {
         });
       }
     } catch (error) {
+      console.error('MFA verification failed:', error.response?.data || error.message);
       Swal.fire({
         title: "Error",
         text: "There was an error verifying your OTP. Please try again later.",
@@ -46,6 +57,7 @@ const MFALoginPage = ({ email, onMFAVerified }) => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="login-container">

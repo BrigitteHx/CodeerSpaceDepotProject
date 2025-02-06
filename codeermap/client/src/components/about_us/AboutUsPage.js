@@ -24,9 +24,7 @@ const AboutUsPage = () => {
                         Empowering service providers with advanced tools that streamline operations, enhance safety, and promote eco-friendly practices. Innovation and sustainability guide everything we do.
                     </p>
                 </div>
-                <div className="section-icon">
-                    <GiSolarPower  className="icon-mission" />
-                </div>
+        
             </section>
 
             {/* What We Do Section */}

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../AuthContext';  // Zorg ervoor dat je deze import hebt
 import './style/DropdownMenu.css';
 
 const DropdownMenu = () => {
   const { logout, userData } = useAuth();  // Assuming `userId` is available in the context
-  const navigate = useNavigate();  
+  const navigate = useNavigate();  // Gebruik de navigate functie voor redirects
   const [isOpen, setIsOpen] = useState(false);
   const userId = userData?.id;
 
@@ -14,9 +14,11 @@ const DropdownMenu = () => {
   };
 
   const handleLogout = () => {
-    logout();
-    navigate('/login'); 
+    logout(); // Call the logout function
+    navigate('/login'); // Redirect to the login page
+    window.location.reload(); // Reload the page
   };
+  
 
   return (
     <div className="dropdown-menu">
@@ -28,9 +30,9 @@ const DropdownMenu = () => {
       <div className={`dropdown-content ${isOpen ? 'open' : ''}`}>
         <Link to="/home" className="menu-item" onClick={toggleMenu}>Home</Link>
         <Link to="/information" className="menu-item" onClick={toggleMenu}>Information</Link>
-        <Link to="/SolarDashboard" className="menu-item" onClick={toggleMenu}>Solar Panel Dashboard</Link>
-        <Link to="/BatteryDashboard" className="menu-item" onClick={toggleMenu}>Battery Dashboard</Link>
-        <Link to={`/SimulationDashboard`}className="menu-item" onClick={toggleMenu}>Simulation Dashboard</Link>
+        <Link to="/solar_dashboard" className="menu-item" onClick={toggleMenu}>Solar Panel Dashboard</Link>
+        <Link to="/battery_dashboard" className="menu-item" onClick={toggleMenu}>Battery Dashboard</Link>
+        <Link to={"/simulation_dashboard"}className="menu-item" onClick={toggleMenu}>Simulation Dashboard</Link>
         <Link to="/user-account/personal-info" className="menu-item" onClick={toggleMenu}>User Account</Link>
         <Link to="/faq" className="menu-item" onClick={toggleMenu}>FAQ</Link>
         <Link to="/contact" className="menu-item" onClick={toggleMenu}>Contact</Link>

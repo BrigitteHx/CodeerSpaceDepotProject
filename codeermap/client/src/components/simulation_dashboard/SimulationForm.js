@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
@@ -26,7 +26,27 @@ const SimulationForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [simulationResults, setSimulationResults] = useState(null);
-  const [currentStep, setCurrentStep] = useState(1); // Current step state
+  const [currentStep, setCurrentStep] = useState(1);
+
+  useEffect(() => {
+    const fetchSimulationData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/simulation", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
+  
+        if (response.data.length > 0) {
+          setFormData(response.data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching simulation data:", error);
+      }
+    };
+  
+    fetchSimulationData();
+  }, []);
 
   // Validation for each step
   const validateInput = () => {
@@ -200,7 +220,7 @@ const handleChange = (event) => {
         };
 
         await axios.post(
-          "http://localhost:5000/api/simulation",
+          "http://localhost:5000/api/simulation/save",
           { ...simulationData, user_id: userId },
           {
             headers: {
@@ -218,7 +238,7 @@ const handleChange = (event) => {
         });
 
         setSimulationResults(simulationResults);
-        navigate(`/SimulationDashboard`);
+        navigate(`/simulation_dashboard`);
       } catch (error) {
         console.error("Error saving simulation:", error);
         Swal.fire({
@@ -236,7 +256,7 @@ const handleChange = (event) => {
         text: "Your simulation data was not saved.",
       });
     }
-    navigate(`/SimulationDashboard`);
+    navigate(`/simulation_dashboard`);
     setLoading(false);
   };
 

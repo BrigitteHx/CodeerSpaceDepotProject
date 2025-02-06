@@ -10,7 +10,6 @@ const Advice = ({ results, displayResults }) => {
   const { fifteenDay, daily } = displayResults;
 
   // Advice logic
-  
   const advice = [];
 
   // Check if the user is saving a lot on energy

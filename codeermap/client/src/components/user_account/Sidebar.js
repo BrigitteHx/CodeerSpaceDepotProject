@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import defaultProfilePic from "./images/profile-image.png";
 import "./style/Sidebar.css";
 
 const Sidebar = ({ onToggle }) => {
-  const { userData , logout } = useAuth();
+  const { userData, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -22,16 +22,15 @@ const Sidebar = ({ onToggle }) => {
     navigate('/login');
   };
 
-  
   return (
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       {/* Toggle Button */}
-      <div className="toggle-btn" onClick={toggleSidebar}>
+      <div className="sidebar-toggle" onClick={toggleSidebar}>
         <i className={`bi ${isCollapsed ? "bi-chevron-right" : "bi-chevron-left"}`}></i>
       </div>
 
       {/* Navigation Menu */}
-      <ul>
+      <ul className="sidebar-nav">
         <li>
           <NavLink to="/user-account/personal-info" activeClassName="active">
             <i className="icon bi bi-person"></i>
@@ -62,20 +61,20 @@ const Sidebar = ({ onToggle }) => {
       <div className="profile-section">
         {userData?.profilePicture ? (
           <img
-            src={`http://localhost:5000${userData.profilePicture}`} 
-            alt="Profile"
+          src={`http://localhost:5000${userData.profilePicture}`} 
+          alt="Profile"
           />
         ) : (
           <img src={defaultProfilePic} alt="Default Profile" />
         )}
-        <span className="name">{userData?.name || "User Name"}</span>
+        <span className={`name ${isCollapsed ? 'collapsed' : ''}`}>{userData?.name || "User Name"}</span>
       </div>
 
       {/* Logout Section */}
       <div className="logout-section">
-        <NavLink to="/login" className="logout-link">
+        <NavLink to="/login" className="logout-link" onClick={handleLogout}>
           <i className="icon bi bi-box-arrow-right"></i>
-          <span className="logout-link text" onClick={handleLogout}>Logout</span>
+          <span className="text">Logout</span>
         </NavLink>
       </div>
     </div>

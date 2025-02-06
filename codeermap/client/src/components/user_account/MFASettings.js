@@ -3,7 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 import axios from "axios";
 import Swal from "sweetalert2"; 
 
-const MFASettings = ({ email, onMFAVerified }) => {
+const MFASettings = ({ email }) => {
   const [mfaMethod, setMfaMethod] = useState(null);
   const [qrCode, setQrCode] = useState("");  
   const [totpToken, setTotpToken] = useState("");  
@@ -12,21 +12,22 @@ const MFASettings = ({ email, onMFAVerified }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/check-mfa-enabled", { params: { email } })
+      .post("http://localhost:5000/api/auth/check-mfa-enabled", { email }) // Change GET to POST
       .then((response) => {
         // Handle the response
       })
       .catch(() => setError("Error while checking MFA status"));
 
     axios
-      .post("http://localhost:5000/api/setup-totp", { email })
+      .post("http://localhost:5000/api/auth/setup-totp", { email })
       .then((response) => {
         setMfaMethod("totp");
         setQrCode(response.data.qrCodeUrl); 
       })
       .catch(() => setError("Error while fetching MFA setup"));
-            
-      },[email]);
+
+    }, [email]);
+
 
   const handleSubmit = async (otpValue, event, email) => {
     event.preventDefault(); 
@@ -35,7 +36,7 @@ const MFASettings = ({ email, onMFAVerified }) => {
       email: email,   
       otp: otpValue,  
     };
-    const response = await fetch('http://localhost:5000/api/verify-totp', {
+    const response = await fetch('http://localhost:5000/api/auth/verify-totp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +50,9 @@ const MFASettings = ({ email, onMFAVerified }) => {
         icon: "success",
         confirmButtonText: "Proceed",
       }).then(() => {
-        window.location.reload();  // Refresh the page to reflect MFA status
+        setIsMFAEnabled(true);
+        window.location.reload();
+
       });
     } else {
       Swal.fire({

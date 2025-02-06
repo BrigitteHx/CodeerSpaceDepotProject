@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Line, Pie } from "react-chartjs-2";
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate} from "react-router-dom";
+import PanelOutputChart from "./PanelOutputChart";
 import axios from 'axios';
 import {
   Chart as ChartJS,
@@ -32,17 +33,24 @@ const Homepage = () => {
   const [error, setError] = useState(null);
   const [weatherData, setWeatherData] = useState([]); // State for weather data
 
+  const [dynamicPrices] = useState([0.20, 0.22, 0.18, 0.25, 0.24, 0.21, 0.19, 0.23, 0.22, 0.20, 0.21, 0.19, 0.22, 0.23, 0.24, 0.25, 0.26, 0.22, 0.20, 0.18, 0.22, 0.21, 0.19, 0.20]);
+  const defaultUsage = [
+    0.2, 0.3, 0.3, 0.2, 0.3, 0.3, 0.7, 1.2, 1.5, 1.8, 1.5, 1.2,
+    1.0, 1.2, 1.4, 1.8, 2.0, 2.5, 1.8, 1.5, 1.2, 0.8, 0.6, 0.5,
+  ];
+  const [hourlyUsage, setHourlyUsage] = useState(defaultUsage);
+  const { userId } = useParams();
   // Function to fetch user data
   const fetchUserData = async () => {
     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
 
     try {
-      const response = await axios.get('http://localhost:5000/api/user-info', {
+      const response = await axios.get('http://localhost:5000/api/user/user-info', {
         headers: {
-          Authorization: token, // Send the token in the Authorization header
+          Authorization: `Bearer ${token}`, // Send the token in the Authorization header
         },
       });
-      setUserData(response.data.user); // Set the user data in the state
+      setUserData(response.data); // Set the user data in the state
     } catch (error) {
       setError('Error fetching user data.');
       console.error('Error fetching user data:', error);
@@ -85,39 +93,6 @@ const Homepage = () => {
       
     }
   }, [userData]);
-
-    const lineChartData = {
-    labels: ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"],
-    datasets: [
-      {
-        label: "Energy Production (kWh)",
-        data: [0,2,4,5,9,14,25,30,32,25,20,14,7,5,0],
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const lineChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-      },
-    },
-    interaction: {
-      mode: "nearest",
-      axis: "x",
-      intersect: false,
-    },
-  };
 
   const pieChartData = {
     labels: ["Used Energy", "Available Energy"],
@@ -163,12 +138,8 @@ const Homepage = () => {
       <div className="container charts-container my-4">
         <div className="homepage-charts-row">
           <div className="col-md-4 chart-box">
-            <h4>Energy Production Summary</h4>
-            <Line
-              data={lineChartData}
-              options={lineChartOptions}
-              style={{ height: "400px", width: "100%" }}
-            />
+            <h4>Solar Energy Production</h4>
+            <PanelOutputChart userId={userId} dynamicPrices={dynamicPrices} hourlyUsage={hourlyUsage} />
           </div>
 
           <div className="col-md-4 chart-box">

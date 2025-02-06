@@ -1,3 +1,4 @@
+/* Algemene stijlen */
 .simulation-form {
   background: linear-gradient(135deg, #f9f9f9, #e8f3fc);
   border-radius: 12px;
@@ -20,8 +21,12 @@
   }
 }
 
-.simulation-form h2 {
+.simulation-form h2,
+.simulation-form .form-description {
   text-align: center;
+}
+
+.simulation-form h2 {
   color: #000;
   margin-bottom: 20px;
   font-size: 30px;
@@ -30,13 +35,13 @@
 }
 
 .simulation-form .form-description {
-  text-align: center;
   color: #555;
   font-size: 16px;
   margin-bottom: 30px;
   line-height: 1.6;
 }
 
+/* Form-sectie */
 .simulation-form .form-section {
   margin-bottom: 25px;
   border: 1px solid #ddd;
@@ -51,6 +56,7 @@
   transform: scale(1.02);
 }
 
+/* Labels en invoervelden */
 .simulation-form label {
   display: flex;
   flex-direction: column;
@@ -81,6 +87,7 @@
   font-size: 15px;
 }
 
+/* Tooltip */
 .simulation-form .tooltip {
   display: inline-block;
   margin-left: 8px;
@@ -108,112 +115,50 @@
   z-index: 1;
   font-size: 14px;
 }
-.simulation-form  .preset-description {
-  margin-top: 10px;
-  font-size: 0.9em;
-  color: #555;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
+
 .simulation-form .tooltip:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
   transform: translateX(-50%) translateY(-10px);
 }
 
-.simulation-form .submit-btn,
-.simulation-form .set-average-btn {
-  width: 100%;
-  padding: 14px;
-  background-color: #007bff;
-  color: white;
+/* Knoppen */
+.simulation-form .form-buttons button {
+  flex-grow: 1;
+  width: 25%;
+  margin: 5px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.simulation-form .submit-btn:hover,
-.simulation-form .set-average-btn:hover {
-  background-color: #0056b3;
+.simulation-form .prev-btn { background-color: #6c757d; color: white; }
+.simulation-form .next-btn { background-color: #17a2b8; color: white; }
+.simulation-form .submit-btn { background-color: #28a745; color: white; }
+
+.simulation-form .prev-btn:hover,
+.simulation-form .next-btn:hover,
+.simulation-form .submit-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .simulation-form .submit-btn:disabled {
-  background-color: #d6d6d6;
+  background-color: #6c757d;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.simulation-form .set-average-btn {
-  background-color: #28a745;
-}
-
-.simulation-form .set-average-btn:hover {
-  background-color: #218838;
-}
-
-.simulation-form .chart-container {
-  margin-top: 40px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 0 auto;
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-.simulation-form  .checkbox-label {
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: #555;
-  cursor: pointer;
-  gap: 10px;
-}
-
-.simulation-form  .checkbox-label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-.simulation-form .preset-btn {
-  padding: 10px 20px;
-  margin: 10px 5px;
-  background-color: #1D3F75;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.simulation-form .preset-btn:hover {
-  background-color: #3868b7; 
-  transform: translateY(-2px);
-}
-
-.simulation-form .preset-btn:active {
-  background-color: #0d5968;
-}
-
-.simulation-form .preset-btn.active {
-  background-color: #F89820; 
-  box-shadow: 0 0 8px rgba(223, 169, 23, 0.6);
-}
-
+/* Stap-indicator */
 .simulation-form .step-container {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
-  font-family: 'Roboto', sans-serif;
 }
 
 .simulation-form .step {
@@ -222,7 +167,6 @@
   text-align: center;
   font-size: 16px;
   font-weight: bold;
-  color: #007bff;
 }
 
 .simulation-form .step:before {
@@ -236,32 +180,17 @@
   border-radius: 50%;
   background-color: #e8f3fc;
   border: 2px solid #007bff;
-  z-index: 1;
 }
 
-.simulation-form .step.active:before {
+.simulation-form .step.active:before,
+.simulation-form .step.completed:before {
   background-color: #007bff;
   border-color: #007bff;
   color: white;
 }
 
-.simulation-form .step .step-number {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 18px;
-  color: #007bff;
-}
-
-.simulation-form .step.completed {
-  color: #28a745;
-}
-
-.simulation-form .step.completed:before {
-  background-color: #28a745;
-  border-color: #28a745;
-}
+.simulation-form .step.completed { color: #28a745; }
+.simulation-form .step.completed:before { background-color: #28a745; border-color: #28a745; }
 
 .simulation-form .step-line {
   position: absolute;
@@ -270,60 +199,19 @@
   width: 100%;
   height: 2px;
   background-color: #007bff;
-  z-index: 0;
   transform: translateX(-50%);
-  transition: all 0.3s ease;
 }
 
-.simulation-form .step.active + .step-line {
-  background-color: #007bff;
-}
-
-.simulation-form .step.completed + .step-line {
-  background-color: #28a745;
-}
-
-/* Responsive Design */
+/* Responsiviteit */
 @media (max-width: 768px) {
-  .simulation-form {
-    padding: 20px;
-    margin: 10px;
-  }
-
-  .simulation-form h2 {
-    font-size: 24px;
-  }
-
-  .simulation-form .form-description {
-    font-size: 14px;
-  }
-
-  .simulation-form .form-section {
-    padding: 10px;
-  }
-
+  .simulation-form { padding: 20px; margin: 10px; }
+  .simulation-form h2 { font-size: 24px; }
+  .simulation-form .form-description { font-size: 14px; }
   .simulation-form input,
-  .simulation-form select {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  .simulation-form .submit-btn,
-  .simulation-form .set-average-btn {
-    font-size: 16px;
-    padding: 10px;
-  }
-  .simulation-form .step-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .simulation-form .step {
-    width: auto;
-    margin-bottom: 20px;
-  }
-
-  .simulation-form .step-line {
-    display: none;
-  }
+  .simulation-form select,
+  .simulation-form button { font-size: 14px; padding: 10px; }
+  .simulation-form .step-container { flex-direction: column; align-items: center; }
+  .simulation-form .step-line { display: none; }
+  .simulation-form .form-buttons { flex-direction: column; }
+  .simulation-form .form-buttons button { width: 100%; margin-bottom: 10px; }
 }

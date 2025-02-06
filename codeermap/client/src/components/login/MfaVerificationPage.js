@@ -17,7 +17,7 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
     if (!/^\d+$/.test(code)) {
       Swal.fire({
         title: "Error",
-        text: "The code must contain only numbers.",
+        text: "The code must only contain numbers.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -26,7 +26,7 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
 
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/verify-mfa-email", { email, code });
+      await axios.post("http://localhost:5000/api/auth/verify-email-mfa", { email, code });
       Swal.fire({
         title: "Success!",
         text: "Verification successful. You will be redirected to the homepage.",
@@ -37,6 +37,7 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
         navigate("/home");
       });
     } catch (err) {
+      console.log(err);
       Swal.fire({
         title: "Error",
         text: "Invalid or expired code. Please try again.",
@@ -52,7 +53,7 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
   const handleResendCode = async () => {
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/send-mfa-code", { email });
+      await axios.post("http://localhost:5000/api/auth/send-mfa-code", { email });
       Swal.fire({
         title: "Code Sent!",
         text: "A new code has been sent to your email.",
@@ -77,7 +78,7 @@ const MfaVerificationPage = ({ email, onMFAVerified }) => {
       <div className="login-left-panel">
         <h1 className="login-right-panel-title">MFA Verification</h1>
         <p className="login-right-panel-description">
-          Enter the code sent to your email.
+          Enter the code that was sent to your email.
         </p>
         <input
           type="text"

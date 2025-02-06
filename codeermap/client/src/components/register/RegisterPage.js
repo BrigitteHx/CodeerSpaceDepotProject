@@ -110,7 +110,7 @@ const RegisterForm = () => {
     
     try {
       // Send the actual form data to the API
-      await axios.post('http://localhost:5000/api/register', {
+      await axios.post('http://localhost:5000/api/auth/register', {
         email: formData.email,
         name: formData.name,
         password: formData.password,

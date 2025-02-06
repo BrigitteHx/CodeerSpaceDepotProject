@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import InputAdornment from '@mui/material/InputAdornment';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import './style/batteryDashboard.css';
+
 
 const AddBattery = ({ onBatteryAdded }) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     capacity: '',
-    installationDate: '',
+    installationDate: null,
   });
   const [errors, setErrors] = useState({
     name: '',
@@ -22,7 +29,17 @@ const AddBattery = ({ onBatteryAdded }) => {
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: '' });
   };
-
+const handleDateChange = (newValue) => {
+  // newValue is a dayjs object (or null)
+  setFormData((prev) => ({
+    ...prev,
+    installationDate: newValue,
+  }));
+  setErrors((prev) => ({
+    ...prev,
+    installationDate: '',
+  }));
+};
   const handleSubmit = async (event) => {
     event.preventDefault();
     let newErrors = {
@@ -53,12 +70,12 @@ const AddBattery = ({ onBatteryAdded }) => {
         setFormData({
           name: '',
           capacity: '',
-          installationDate: '',
+          installationDate: null,
         });
       };
 
     try {
-        const response = await axios.post('http://localhost:5000/api/addBattery', formData, {
+        const response = await axios.post('http://localhost:5000/api/battery/addBattery', formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,  // Include the token here
             },
@@ -70,7 +87,12 @@ const AddBattery = ({ onBatteryAdded }) => {
             title: 'Success!',
             text: 'Battery added successfully',
             icon: 'success',
-            confirmButtonText: 'Ok'
+            confirmButtonText: 'Ok',
+            customClass: {
+              confirmButton: 'ok-button-battery',
+            },
+            buttonsStyling: false,
+            background: 'white'
           }).then(() => {
             window.location.reload();
     });
@@ -81,10 +103,10 @@ const AddBattery = ({ onBatteryAdded }) => {
 
   return (
     <>
-      <IconButton
+       <IconButton
         onClick={() => setOpen(true)}
         color="primary"
-        sx={{ marginTop: '10px' }}
+        sx={{ marginTop: '10px', right: '0%' }}
       >
         <AddIcon />
       </IconButton>
@@ -113,24 +135,40 @@ const AddBattery = ({ onBatteryAdded }) => {
             helperText={errors.capacity}
 
           />
-          <TextField
-            margin="dense"
-            label="Installation Date"
-            type="date"
-            name="installationDate"
-            value={formData.installationDate}
-            onChange={handleChange}
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            error={Boolean(errors.installationDate)}
-            helperText={errors.installationDate}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker  
+            format="DD-MM-YYYY"
+            slotProps={{
+                openPickerButton: {
+                },
+                inputAdornment: {
+                  position: 'start',
+                },  
+              }}
+            sx={{ marginTop: '10px', width: '100% !important' }}
+              label="Installation Date"
+              value={formData.installationDate}
+              onChange={handleDateChange}
+              renderInput={(params) => (
+                <TextField sx={{ marginTop: '10px', width: '100% !important' }}
+                  {...params}
+                  margin="dense"
+                  error={Boolean(errors.installationDate)}
+                  helperText={errors.installationDate}
+                />
+              )}
+              disablePortal
+              PopperProps={{
+                placement: "right-start",
+              }}
+            />
+          </LocalizationProvider>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color="secondary">
+          <Button className="cancel-button-battery" onClick={() => setOpen(false)} color="error">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button className="add-button-battery" onClick={handleSubmit} sx={{ color: '#0ee315' }}>
             Add
           </Button>
         </DialogActions>
@@ -140,3 +178,4 @@ const AddBattery = ({ onBatteryAdded }) => {
 };
 
 export default AddBattery;
+

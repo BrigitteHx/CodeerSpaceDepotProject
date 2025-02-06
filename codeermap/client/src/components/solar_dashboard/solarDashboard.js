@@ -1,70 +1,108 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from './card';
 import Chart from './energy_chart';
-import "./styles/solarDashboard.css"; 
+import './styles/solarDashboard.css';
+import { SimulationData } from '../simulation_dashboard/SimulationData';
+import { calculateResults } from '../simulation_dashboard/simulationUtils';  
+import DailyRevenueCard from './DailyRevenueCalculator';
+import WeeklyConsumptionCard from './WeeklyConsumptionCard';
+import EnergyProductionCard from './EnergyProductionCard';
+import PerformanceMonitoring from './PerformanceMonitoring'; 
 
 function SolarDashboard() {
-    console.log("SolarDashboard component rendered");
+    const [isPanelSectionOpen, setIsPanelSectionOpen] = useState(false);
+    const { results, sunshineData, loading, error } = SimulationData(); 
 
-    const dailyRevenueChartData = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-        data: [200, 300, 400, 500],
-        label: 'Revenue (€)',
-      };
-    
-      const consumptionChartData = {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        data: [100, 120, 110, 130],
-        label: 'Consumption (kWh)',
-      };
+    if (loading) return <p>Loading simulation data...</p>;
+    if (error) return <p>Error fetching data: {error}</p>;
 
-      const estimatedSavings = {
+    const togglePanelSection = () => {
+        setIsPanelSectionOpen(!isPanelSectionOpen);
+    };
+
+    const panelData = [
+        { id: 'Panel 1', production: 180, average: 200 },
+        { id: 'Panel 2', production: 210, average: 200 },
+        { id: 'Panel 3', production: 190, average: 200 },
+    ];
+
+    const getStatus = (production, average) => production >= average ? 'Normal' : 'Underperforming';
+    const getStatusColor = (status) => status === 'Normal' ? 'green' : 'red';
+
+    const estimatedSavings = {
         labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        data: [10, 12, 11, 9],
+        data: [6, 12, 10, 9],
         label: 'Savings (€)',
-      };
-      
-return (
-    <div className="solar-dashboard">
-        <div className="card-container">
-            <Card title="Daily Revenue" value="€ 14.450" chartData={dailyRevenueChartData} />
-            <Card title="Consumption" value="14.450 kWh" chartData={consumptionChartData} />
-            <Card title="Estimated Savings" value="€ 14.450" chartData={estimatedSavings} />
-        </div>
+    };
 
-        <div className='second-row'>
-            <Chart title="Energy Production" />
+    const calculateTotal = (data) => data.reduce((sum, value) => sum + value, 0);
+    // Calculate the displayResults using the simulation logic
+    const displayResults = results && sunshineData 
+        ? calculateResults(results, sunshineData, [], [])  // Pass dummy arrays for prices and usage if needed
+        : null;
 
-            <div className="performance-monitoring">
-                <h2>Performance Monitoring</h2>
-                {/* <div className='divider'></div> */}
-                <div className='charging-usage'>
-                    <div className='charging'>
-                        <h3>Total Charging</h3>
-                        <h1>14.450 kWh</h1>
-                        <p>Min. 3.0 Max. 10.0</p>
-                    </div>
-                    <div className='usage'>
-                        <h3>Power Usage</h3>
-                        <h1>14.450 kWh</h1>
-                        <p>1 Hour Usage 6 kWh</p>
-                    </div>
+    const totalEnergyProduced = parseFloat(displayResults?.fifteenDay.panelOutput || 0).toFixed(2);
+    const batteryCapacity = parseFloat(results?.battery_capacity || 0).toFixed(2);
+    const totalYield = parseFloat(displayResults?.fifteenDay.totalYield || 0).toFixed(2);
+
+    console.log('Total Energy Usage:', displayResults?.fifteenDay.totalEnergyUsage);
+
+
+    
+    return (
+        <div className="solar-dashboard">
+            <div className="card-container">
+                <DailyRevenueCard results={results} sunshineData={sunshineData} />
+                <WeeklyConsumptionCard results={results} />
+                <Card 
+                    title="Estimated Savings" 
+                    value={`€ ${calculateTotal(estimatedSavings.data).toFixed(2)}`} 
+                    chartData={estimatedSavings} 
+                    chartColor="rgba(255, 159, 64, 1)" // orange
+                />
+            </div>
+
+            <div className="second-row">
+                <div className="energy-production">
+                    <EnergyProductionCard displayResults={displayResults} />
                 </div>
-                <div className='capacity-yield'>
-                    <div className='capacity'>
-                        <h3>Capacity</h3>
-                        <h4>220 kWh</h4>
-                    </div>
-                    <div className='yield'>
-                        <h3>Total yield</h3>
-                        <h4>175 kWh</h4>
-                    </div>
-                </div>
-            </div>            
-        </div>
 
-    </div>
-);
+                <PerformanceMonitoring 
+                    totalEnergyProduced={totalEnergyProduced}
+                    results={results}
+                    batteryCapacity={batteryCapacity}
+                    totalYield={totalYield}
+                    displayResults={displayResults}
+                />
+            </div>
+
+            <div className="panel-status-section">
+                <h2 onClick={togglePanelSection} style={{ cursor: 'pointer', color: '#1b3b73' }}>
+                    Panel Performance Monitoring {isPanelSectionOpen ? '▲' : '▼'}
+                </h2>
+                {isPanelSectionOpen && (
+                    <div className="panel-status-list">
+                        {panelData.map(panel => {
+                            const status = getStatus(panel.production, panel.average);
+                            const color = getStatusColor(status);
+                            return (
+                                <div 
+                                    key={panel.id} 
+                                    className="panel-status" 
+                                    style={{ borderColor: color }}
+                                >
+                                    <h3>{panel.id}</h3>
+                                    <p style={{ color: color }}>Status: {status}</p>
+                                    <p>Production: {panel.production} kWh</p>
+                                    <p>Average: {panel.average} kWh</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default SolarDashboard;

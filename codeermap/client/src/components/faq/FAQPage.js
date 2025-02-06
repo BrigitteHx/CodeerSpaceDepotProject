@@ -12,12 +12,11 @@ const questionsAndAnswers = [
 ];
 
 const actionButtons = [
-    { label: "View Simulation Guide", description: "Read our guide to understand how the simulation works and calculates energy yield." },
-    { label: "Battery Optimization Tips", description: "Discover how to extend the lifespan of your battery and optimize performance." },
-    { label: "Different Solar Panel Options", description: "Explore the various solar panel options available in the simulation." },
-    { label: "Calculate Savings", description: "Use our tool to calculate how much you can save with solar energy." },
+    { label: "View Simulation Guide", description: "Read our guide to understand how the simulation works and calculates energy yield.", action: "viewSimulationGuide" },
+    { label: "Battery Optimization Tips", description: "Discover how to extend the lifespan of your battery and optimize performance.", action: "batteryOptimization" },
+    { label: "Different Solar Panel Options", description: "Explore the various solar panel options available in the simulation.", action: "solarPanelOptions" },
+    { label: "Calculate Savings", description: "Use our tool to calculate how much you can save with solar energy.", action: "calculateSavings" },
 ];
-
 
 function FAQPage() {
     const [activeId, setActiveId] = useState(null);
@@ -47,6 +46,30 @@ function FAQPage() {
     const suggestions = questionsAndAnswers
         .filter(({ question }) => question.toLowerCase().includes(searchTerm.toLowerCase()))
         .map(({ question }) => question);
+
+    // Action Button Handlers
+    const handleActionButtonClick = (action) => {
+        switch (action) {
+            case "viewSimulationGuide":
+            // Open PDF in new tab
+            window.open('/simulationGuide/Simulation Dashboard Guide.pdf', '_blank');
+            break;
+            case "batteryOptimization":
+                // Redirect to battery dashboard
+                window.location.href = '/BatteryDashboard';
+                break;
+            case "solarPanelOptions":
+                // Redirect to solar dashboard
+                window.location.href = '/SolarDashboard';
+                break;
+            case "calculateSavings":
+                // Redirect to simulation dashboard
+                window.location.href = '/SimulationDashboard';
+                break;
+            default:
+                break;
+        }
+    };
 
     return (
         <div className="faq-page">
@@ -93,7 +116,7 @@ function FAQPage() {
             {/* Action Buttons Grid */}
             <div className="action-buttons">
                 {actionButtons.slice(0, 4).map((button, index) => (
-                    <div key={index} className="action-button">
+                    <div key={index} className="action-button" onClick={() => handleActionButtonClick(button.action)}>
                         <h3>{button.label}</h3>
                         <p>{button.description}</p>
                     </div>
