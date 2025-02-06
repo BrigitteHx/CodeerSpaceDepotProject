@@ -1,0 +1,77 @@
+.floating-chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ec971f; /* Sky blue from your theme */
+    color: white;
+    padding: 12px 16px;
+    border-radius: 50px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1000;
+    animation: pulse 2s infinite;
+}
+
+.floating-chat-button:hover {
+    background-color: #bc7512; /* Darker shade of blue on hover */
+    transform: scale(1.05);
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Make the chatbot sticky */
+.chatbot-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: fit-content; /* Width of the chatbot */
+    max-height: 90%; /* Prevents overflow */
+}
+
+/* Adjustments for mobile screens */
+@media screen and (max-width: 480px) {
+    .floating-chat-button {
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 12px;
+        font-size: 16px;
+        gap: 8px;
+    }
+
+    .chatbot-container {
+        bottom: 60px;
+        right: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .floating-chat-button {
+        bottom: 15px;
+        right: 15px;
+        padding: 11px 14px;
+        font-size: 17px;
+        gap: 9px;
+    }
+
+    .chatbot-container {
+        bottom: 70px;
+        right: 15px;
+    }
+}

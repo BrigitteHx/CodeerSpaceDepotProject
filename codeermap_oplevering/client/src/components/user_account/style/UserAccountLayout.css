@@ -1,0 +1,91 @@
+/* User Account Layout */
+.user-account-layout {
+    display: flex;
+    min-height: 100vh;
+    text-align: left;
+  }
+  
+  .user-account-layout .user-account-content {
+    flex-grow: 1;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    margin-left: 300px;
+  }
+  
+  .user-account-layout.collapsed .user-account-content {
+    margin-left: 170px;
+  }
+  
+  .sidebar {
+    transition: width 0.3s ease;
+  }
+  
+  .sidebar.collapsed {
+    width: 150px;
+  }
+  
+  .sidebar.collapsed .text {
+    display: none;
+  }
+
+  /* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* Adjust width for smaller screens */
+  }
+  /* Collapsed Sidebar */
+  .sidebar.collapsed {
+    width: 100px;
+    transition: width 0.3s ease;
+  }
+
+  .sidebar.collapsed .text {
+    display: none;
+  }
+
+  .sidebar.collapsed .icon {
+    margin-right: 0;
+  }
+  .profile-section img {
+    width: 45px; /* Adjust image size for smaller screens */
+    height: 45px;
+  }
+
+  .profile-section .name {
+    font-size: 16px; /* Adjust font size for smaller screens */
+  }
+
+  .sidebar a {
+    font-size: 14px; /* Adjust link font size for better fit */
+    padding: 10px 15px;
+  }
+
+  .sidebar a .icon {
+    font-size: 20px;
+    margin-right: 10px;
+  }
+
+  /* user account content */
+  .user-account-layout .user-account-content {
+    margin-left: 200px;
+  }
+  
+  .user-account-layout.collapsed .user-account-content {
+    margin-left: 100px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 40%; /* Full width for very small screens */
+  }
+  /* user account content */
+  
+  .user-account-layout .user-account-content {
+    margin-left: 45%;
+  }
+  
+  .user-account-layout.collapsed .user-account-content {
+    margin-left: 100px;
+  }
+}

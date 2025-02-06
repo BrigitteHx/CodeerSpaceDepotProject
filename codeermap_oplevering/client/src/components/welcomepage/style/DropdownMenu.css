@@ -1,0 +1,111 @@
+/* Dropdown container */
+.dropdown-menu {
+    position: relative; /* Zorg dat de dropdown-content relatief is aan dit element */
+    display: inline-block;
+    margin-right: 70px; /* Verplaats de hele container 20px naar links */
+  }  
+  
+  /* Menu icoon */
+  .menu-icon {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .menu-icon div {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    transition: background-color 0.3s;
+  }
+  
+  .menu-icon:hover div {
+    background-color: #007bff;
+  }
+  
+  /* Dropdown content */
+.dropdown-content {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 40px;
+  right: -20px; /* Verplaats het menu 20px naar links */
+  background-color: #fff;
+  border-radius: 8px;
+  width: 250px; /* Zorg dat alle items erin passen */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+  
+  .dropdown-content.open {
+    display: flex; /* Houdt menu open bij klik */
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Menu-items binnen sliden */
+  .menu-item {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transform: translateX(-30px); /* Startpositie */
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Animatie vertraging */
+  .dropdown-content.open .menu-item {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .menu-item:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  .menu-item:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  .menu-item:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+  .menu-item:nth-child(4) {
+    transition-delay: 0.4s;
+  }
+  .menu-item:nth-child(5) {
+    transition-delay: 0.5s;
+  }
+  
+  /* Hover-effect */
+  .menu-item:hover {
+    background-color: #007bff;
+    color: #007bff;
+    border-radius: 4px;
+  }
+  
+  /* Logout container styling */
+  .logout-container {
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+  }
+  
+  .logout-container button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    padding: 12px 20px;
+  }
+  
+  .logout-container button:hover {
+    color: #ffffff;
+  }
+  

@@ -1,0 +1,168 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    }
+
+.box-1 {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 8px;
+}
+
+
+.charts-container {
+    margin-top: 20px;
+    margin: 20px;
+}
+
+.chart-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+
+.chart-box h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
+.chart-box canvas {
+    max-height: 300px;
+    width: 100% !important;
+    height: 300px !important;
+}
+
+
+.battery-status {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.battery-status ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.battery-status li {
+    padding: 5px 0;
+    font-size: 16px;
+}
+
+.battery-status li strong {
+    color: #003366;
+}
+.homepage-charts-row{
+    display: flex;
+    gap: 20px;
+}
+
+.placeholder-message {
+    background-color: rgba(255, 99, 132, 0.2); 
+    color: #d6336c; 
+    border-left: 5px solid #d6336c; 
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-message strong {
+    font-weight: bold;
+    color: #b42b51;
+}
+
+.bron_link{
+    display: inline-block;
+    margin-top: 15px;
+    color: #007bff;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .bron_link:hover {
+    background-color: #007bff; 
+    color: #fff; 
+  }
+  
+
+
+@media (max-width: 768px) {
+.charts-container {
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-box {
+    margin-bottom: 15px;
+    max-width: 100%;
+}
+
+.chart-box canvas {
+    max-height: 250px;
+    height: 250px !important;
+}
+
+.header h1 {
+    font-size: 28px;
+}
+
+.header p {
+    font-size: 16px;
+}
+}
+
+@media (max-width: 576px) {
+.header h1 {
+    font-size: 24px;
+}
+
+.header p {
+    font-size: 14px;
+}
+
+.chart-box h4 {
+    font-size: 16px;
+}
+}
+.weather-forecast {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.weather-day {
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.weather-day img {
+    width: 50px;
+    height: 50px;
+}

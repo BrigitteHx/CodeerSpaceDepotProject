@@ -1,0 +1,58 @@
+.sellButton {
+    background-color: #d9534f;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .sellButton:hover {
+    background-color: #c9302c;
+  }
+  
+  .MuiTypography-h6 {
+    color: #343a40;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  
+.battery {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+.battery-dashboard canvas {
+  background-color: transparent;
+}
+
+.cancel-button-battery {
+  color: red;
+}
+.cancel-button-battery:hover {
+  color: white;
+  background-color: red;
+}
+.add-button-battery {
+  color: #0ee315;
+}
+.add-button-battery:hover {
+  color: white;
+  background-color: #0ee315;
+}
+
+.ok-button-battery{
+  color: #0ee315;
+  background-color: #fff;
+  border: #a5dc86 solid 1px;
+}
+.ok-button-battery:hover{
+  color: #fff;
+  background-color: #0ee315;
+}
+.uniform-text-field .MuiSvgIcon-root {
+  width: 100%;
+  height: 20px;
+}

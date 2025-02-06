@@ -1,0 +1,250 @@
+.about-us-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 30px;
+    background: linear-gradient(to bottom right, #ffffff, #f1f3f5);
+}
+
+/* Hero Section with Floating Animation */
+.hero-section {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+    padding: 100px 20px;
+    border-radius: 24px;
+    text-align: center;
+    overflow: hidden;
+    animation: float 6s ease-in-out infinite;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(248, 152, 32, 0.15), rgba(29, 63, 117, 0.1));
+    z-index: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease-out;
+}
+
+.hero-section:hover::before {
+    transform: scaleX(1);
+}
+
+.hero-title {
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    background: linear-gradient(120deg, #F89820, #1D3F75);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    animation: gradientShift 10s ease infinite;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Services Section with Particle Effect */
+.service-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.service-card::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, rgba(248, 152, 32, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.service-card:hover::after {
+    opacity: 1;
+    transform: scale(15);
+}
+
+.service-card:hover {
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.service-icon {
+    font-size: 3.5rem;
+    color: #F89820;
+    margin-bottom: 1.5rem;
+    transition: all 0.4s ease;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+
+/* Values Section with 3D Rotation */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    perspective: 2000px;
+}
+
+.value-item {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.value-item:hover {
+    transform: rotateX(8deg) rotateY(8deg) scale(1.05);
+    box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1), -20px -20px 60px rgba(255, 255, 255, 0.7);
+}
+
+.value-icon {
+    font-size: 3.5rem;
+    color: #1D3F75;
+    transition: all 0.6s ease;
+    animation: floatIcon 4s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* CTA Button with Ripple Effect */
+.cta-button {
+    position: relative;
+    padding: 1.25rem 3rem;
+    background: linear-gradient(45deg, #F89820, #ff9f2f);
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    overflow: hidden;
+    display: inline-block;
+    z-index: 1;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    border-radius: 50%;
+}
+
+.cta-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 30px rgba(248, 152, 32, 0.3), 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Scroll Animation */
+@keyframes slideInFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.section-content,
+.service-card,
+.value-item,
+.story-section {
+    opacity: 0;
+    animation: slideInFromBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Staggered Animation Delays */
+.service-card:nth-child(1) { animation-delay: 0.2s; }
+.service-card:nth-child(2) { animation-delay: 0.4s; }
+.service-card:nth-child(3) { animation-delay: 0.6s; }
+
+.value-item:nth-child(1) { animation-delay: 0.3s; }
+.value-item:nth-child(2) { animation-delay: 0.5s; }
+.value-item:nth-child(3) { animation-delay: 0.7s; }
+
+/* Interactive Hover States */
+.service-icon:hover {
+    transform: scale(1.25) rotate(15deg);
+    color: #1D3F75;
+}
+
+.value-item:hover .value-icon {
+    transform: translateZ(50px) scale(1.25);
+    color: #F89820;
+}
+
+/* Responsive Animations */
+@media (prefers-reduced-motion: reduce) {
+    .hero-section,
+    .service-icon,
+    .value-icon {
+        animation: none;
+    }
+    
+    .service-card,
+    .value-item {
+        transition: box-shadow 0.3s ease;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .service-card:hover,
+    .value-item:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+}
